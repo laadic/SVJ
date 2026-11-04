@@ -28,3 +28,11 @@ export const svj = {
 // Dokud je adresa prázdná, formulář otevře e-mailového klienta
 // s předvyplněnou zprávou na adresu svj.email.
 export const formularAdresa = '';
+
+// ==============================================
+//  KLIENTSKÁ SEKCE (Saltcorn)
+// ==============================================
+// Adresa neveřejné klientské sekce pro vlastníky a výbor,
+// např. 'https://svj-lipova.saltcorn.com'. Návod: saltcorn/README.md
+// Dokud je adresa prázdná, tlačítko „Klientská sekce“ se na webu nezobrazí.
+export const klientskaSekce = 'https://svjlipova.saltcorn.com';

@@ -1,6 +1,6 @@
 ---
 import '../styles/global.css';
-import { svj } from '../nastaveni';
+import { svj, klientskaSekce } from '../nastaveni';
 import { url, tel } from '../utils';
 
 interface Props {
@@ -54,6 +54,15 @@ const jeAktivni = (href: string) =>
                   </a>
                 </li>
               ))
+            }
+            {
+              klientskaSekce && (
+                <li>
+                  <a class="menu__klient" href={klientskaSekce}>
+                    Klientská sekce
+                  </a>
+                </li>
+              )
             }
           </ul>
         </nav>

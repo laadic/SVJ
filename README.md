@@ -7,6 +7,10 @@ Stránky: **Úvod s aktualitami**, **Výbor a kontakty**, **Dokumenty ke stažen
 
 Adresa webu: **https://laadic.github.io/SVJ/**
 
+K webu patří neveřejná **klientská sekce** pro vlastníky, nájemníky, správce a výbor
+(neveřejné dokumenty, evidence jednotek, schvalování faktur). Běží na Saltcornu a návod
+k ní je v [saltcorn/README.md](saltcorn/README.md).
+
 ---
 
 ## Kde co upravit
@@ -22,6 +26,7 @@ Všechny texty jsou v obyčejných textových souborech. Programovat nemusíte.
 | Seznam dokumentů | `src/content/dokumenty.yaml` |
 | Samotné soubory ke stažení (PDF…) | složka `public/dokumenty/` |
 | Odesílání formuláře závad | `src/nastaveni.ts` → `formularAdresa` |
+| Tlačítko „Klientská sekce“ (adresa Saltcornu) | `src/nastaveni.ts` → `klientskaSekce` |
 | Volby „Kde se závada nachází“ | `src/pages/zavady.astro` → seznam `mista` |
 | Barvy webu | začátek souboru `src/styles/global.css` |
 
@@ -199,4 +204,5 @@ src/
   layouts/         společná hlavička, menu a patička
   styles/          vzhled (CSS)
 .github/workflows/ automatické zveřejnění na GitHub Pages
+saltcorn/          klientská sekce: balíček pro Saltcorn, návod a vývojové skripty
 ```

@@ -1,0 +1,19 @@
+{
+  "name": "svj-klientska-sekce-vyvoj",
+  "private": true,
+  "description": "Vývojové skripty klientské sekce SVJ (Saltcorn): sestavení, testovací data, export packu, testy",
+  "scripts": {
+    "rebuild": "bash rebuild.sh",
+    "export": "node export-pack.js",
+    "smtp": "node smtp.js",
+    "test": "node test.cjs"
+  },
+  "dependencies": {
+    "@saltcorn/cli": "1.6.4",
+    "mailparser": "^3.7.0",
+    "smtp-server": "^3.13.0"
+  },
+  "devDependencies": {
+    "playwright": "1.63.0"
+  }
+}
