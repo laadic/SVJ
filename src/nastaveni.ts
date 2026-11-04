@@ -35,4 +35,4 @@ export const formularAdresa = '';
 // Adresa neveřejné klientské sekce pro vlastníky a výbor,
 // např. 'https://svj-lipova.saltcorn.com'. Návod: saltcorn/README.md
 // Dokud je adresa prázdná, tlačítko „Klientská sekce“ se na webu nezobrazí.
-export const klientskaSekce = '';
+export const klientskaSekce = 'https://svjlipova.saltcorn.com';
