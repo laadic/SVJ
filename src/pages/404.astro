@@ -1,0 +1,12 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { url } from '../utils';
+---
+
+<Layout titulek="Stránka nenalezena">
+  <div class="uvod">
+    <h1>Stránka nenalezena</h1>
+    <p>Požadovaná stránka neexistuje nebo byla přesunuta.</p>
+    <a class="tlacitko" href={url('')}>Zpět na úvod</a>
+  </div>
+</Layout>

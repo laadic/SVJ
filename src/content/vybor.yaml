@@ -1,0 +1,22 @@
+# ČLENOVÉ VÝBORU
+# Každý člen začíná řádkem s pomlčkou "- jmeno:".
+# Ostatní řádky odsaďte dvěma mezerami (stejně jako v ukázce).
+# Pole email, telefon a poznamka jsou nepovinná – klidně je smažte.
+# Na webu se členové zobrazí ve stejném pořadí jako zde.
+
+- jmeno: Jan Novák
+  funkce: Předseda výboru
+  email: predseda@svj-lipova.cz
+  telefon: +420 601 111 222
+  poznamka: Byt č. 5, 2. patro
+
+- jmeno: Marie Svobodová
+  funkce: Místopředsedkyně výboru
+  email: mistopredseda@svj-lipova.cz
+  telefon: +420 602 333 444
+  poznamka: Byt č. 12, 4. patro
+
+- jmeno: Petr Dvořák
+  funkce: Člen výboru – technické záležitosti
+  email: technik@svj-lipova.cz
+  poznamka: Byt č. 3, 1. patro

@@ -1,0 +1,34 @@
+# DOKUMENTY KE STAŽENÍ
+# 1) Soubor (PDF, DOCX…) nahrajte do složky public/dokumenty.
+#    Název souboru pište bez diakritiky a mezer, např. zapis-2027.pdf
+# 2) Sem přidejte záznam začínající "- nazev:".
+#    "soubor" je přesný název souboru včetně přípony.
+#    "datum" pište ve tvaru rok-měsíc-den, např. 2027-05-20 (nepovinné).
+# Dokumenty se na webu seskupí podle pole "kategorie",
+# kategorie i dokumenty jsou ve stejném pořadí jako zde.
+
+- nazev: Stanovy SVJ
+  soubor: stanovy.pdf
+  kategorie: Základní dokumenty
+  datum: 2024-03-15
+  popis: Platné znění stanov schválené shromážděním
+
+- nazev: Domovní řád
+  soubor: domovni-rad.pdf
+  kategorie: Základní dokumenty
+  datum: 2023-06-01
+
+- nazev: Zápis ze shromáždění vlastníků 2026
+  soubor: zapis-shromazdeni-2026.pdf
+  kategorie: Shromáždění vlastníků
+  datum: 2026-05-20
+
+- nazev: Výroční zpráva a účetní závěrka 2025
+  soubor: vyrocni-zprava-2025.pdf
+  kategorie: Hospodaření
+  datum: 2026-04-30
+
+- nazev: Plná moc pro zastoupení na shromáždění
+  soubor: plna-moc.pdf
+  kategorie: Formuláře
+  popis: Vytiskněte, vyplňte a předejte svému zástupci

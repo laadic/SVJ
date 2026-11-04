@@ -1,0 +1,59 @@
+---
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import { url, datum, podlePoradi } from '../utils';
+
+const dokumenty = podlePoradi(await getCollection('dokumenty'));
+
+// Kontrola, že všechny uvedené soubory opravdu existují (jinak by odkaz nefungoval)
+for (const { data: d } of dokumenty) {
+  if (!existsSync(join(process.cwd(), 'public', 'dokumenty', d.soubor))) {
+    throw new Error(
+      `Dokument „${d.nazev}“: soubor public/dokumenty/${d.soubor} neexistuje. ` +
+        'Nahrajte ho do složky public/dokumenty, nebo opravte název v src/content/dokumenty.yaml.',
+    );
+  }
+}
+
+// Seskupení podle kategorie (v pořadí, v jakém jsou v souboru dokumenty.yaml)
+const skupiny = new Map<string, typeof dokumenty>();
+for (const d of dokumenty) {
+  const k = d.data.kategorie;
+  if (!skupiny.has(k)) skupiny.set(k, []);
+  skupiny.get(k)!.push(d);
+}
+const pripona = (soubor: string) => soubor.split('.').pop() ?? '';
+---
+
+<Layout titulek="Dokumenty ke stažení">
+  <div class="uvod">
+    <h1>Dokumenty ke stažení</h1>
+    <p>Stanovy, zápisy ze shromáždění, hospodaření a formuláře. Kliknutím dokument otevřete nebo stáhnete.</p>
+  </div>
+
+  {
+    [...skupiny].map(([kategorie, polozky], i) => (
+      <section class:list={{ sekce: i > 0 }}>
+        <h2>{kategorie}</h2>
+        <ul class="dokumenty">
+          {polozky.map(({ data: d }) => (
+            <li>
+              <a class="dokument" href={url(`dokumenty/${encodeURIComponent(d.soubor)}`)} download>
+                <span class="dokument__ikona" aria-hidden="true">{pripona(d.soubor)}</span>
+                <span class="dokument__text">
+                  <span class="dokument__nazev">{d.nazev}</span>
+                  <span class="dokument__meta">
+                    {[d.datum && datum(d.datum), d.popis].filter(Boolean).join(' · ')}
+                  </span>
+                </span>
+                <span class="dokument__stahnout">Stáhnout ↓</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))
+  }
+</Layout>

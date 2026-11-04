@@ -1,0 +1,27 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import { url, datum } from '../../utils';
+
+export async function getStaticPaths() {
+  const aktuality = await getCollection('aktuality');
+  return aktuality.map((a) => ({ params: { id: a.id }, props: { a } }));
+}
+
+const { a } = Astro.props;
+const { Content } = await render(a);
+---
+
+<Layout titulek={a.data.nadpis} popis={a.data.perex}>
+  <article class="clanek">
+    <a class="zpet" href={url('')}>← Zpět na aktuality</a>
+    <h1>{a.data.nadpis}</h1>
+    <p class="datum">
+      <time datetime={a.data.datum.toISOString()}>{datum(a.data.datum)}</time>
+      {a.data.dulezite && <span class="stitek" style="margin-left:.5rem">Důležité</span>}
+    </p>
+    <div class="karta obsah">
+      <Content />
+    </div>
+  </article>
+</Layout>

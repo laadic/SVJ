@@ -1,0 +1,76 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import { svj } from '../nastaveni';
+import { url, tel, podlePoradi } from '../utils';
+
+const vybor = podlePoradi(await getCollection('vybor'));
+const kontakty = podlePoradi(await getCollection('kontakty'));
+
+const inicialy = (jmeno: string) =>
+  jmeno.split(/\s+/).filter(Boolean).map((s) => s[0]).slice(0, 2).join('').toUpperCase();
+---
+
+<Layout titulek="Výbor a kontakty">
+  <div class="uvod">
+    <h1>Výbor a kontakty</h1>
+    <p>
+      Výbor je statutárním orgánem SVJ. S dotazy se obracejte na společný e-mail{' '}
+      <a href={`mailto:${svj.email}`}>{svj.email}</a> nebo přímo na jednotlivé členy.
+    </p>
+  </div>
+
+  <section>
+    <h2>Členové výboru</h2>
+    <div class="mrizka">
+      {
+        vybor.map(({ data: o }) => (
+          <div class="karta osoba">
+            <div class="osoba__inicialy" aria-hidden="true">{inicialy(o.jmeno)}</div>
+            <div>
+              <h3>{o.jmeno}</h3>
+              <p class="osoba__funkce">{o.funkce}</p>
+              <ul class="kontakt-radky">
+                {o.email && <li><a href={`mailto:${o.email}`}>{o.email}</a></li>}
+                {o.telefon && <li><a href={`tel:${tel(o.telefon)}`}>{o.telefon}</a></li>}
+                {o.poznamka && <li class="slaby">{o.poznamka}</li>}
+              </ul>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="sekce">
+    <h2>Důležité kontakty</h2>
+    <div class="mrizka">
+      {
+        kontakty.map(({ data: k }) => (
+          <div class="karta">
+            <h3>{k.nazev}</h3>
+            {k.popis && <p class="slaby">{k.popis}</p>}
+            <ul class="kontakt-radky">
+              {k.telefon && <li><a href={`tel:${tel(k.telefon)}`}>{k.telefon}</a></li>}
+              {k.email && <li><a href={`mailto:${k.email}`}>{k.email}</a></li>}
+              {k.web && <li><a href={k.web} rel="noopener">{k.web.replace(/^https?:\/\//, '')}</a></li>}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="sekce">
+    <h2>Údaje o společenství</h2>
+    <div class="karta">
+      <ul class="kontakt-radky">
+        <li><strong>{svj.nazev}</strong></li>
+        <li>{svj.adresa}</li>
+        <li>IČO: {svj.ico}</li>
+        <li>Bankovní účet: {svj.bankovniUcet}</li>
+      </ul>
+      <p style="margin:1rem 0 0"><a href={url('zavady/')}>Potřebujete nahlásit závadu? Použijte formulář →</a></p>
+    </div>
+  </section>
+</Layout>

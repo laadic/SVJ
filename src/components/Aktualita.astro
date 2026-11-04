@@ -1,0 +1,16 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { url, datum } from '../utils';
+
+interface Props { a: CollectionEntry<'aktuality'> }
+const { a } = Astro.props;
+---
+
+<article class:list={['karta', 'aktualita', { 'aktualita--dulezita': a.data.dulezite }]}>
+  <div class="aktualita__hlava">
+    <time class="datum" datetime={a.data.datum.toISOString()}>{datum(a.data.datum)}</time>
+    {a.data.dulezite && <span class="stitek">Důležité</span>}
+  </div>
+  <h3><a href={url(`aktuality/${a.id}/`)}>{a.data.nadpis}</a></h3>
+  {a.data.perex && <p>{a.data.perex}</p>}
+</article>
