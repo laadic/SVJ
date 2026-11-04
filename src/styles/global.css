@@ -79,6 +79,9 @@ a:hover { color: var(--barva-hlavni-tmava); }
 }
 .menu a:hover { background: var(--pozadi); color: var(--text); }
 .menu a[aria-current='page'] { background: var(--barva-hlavni-svetla); color: var(--barva-hlavni-tmava); }
+.menu a.menu__klient { box-shadow: inset 0 0 0 1.5px var(--barva-hlavni); color: var(--barva-hlavni-tmava); }
+.menu a.menu__klient:hover { background: var(--barva-hlavni); color: #fff; }
+@media (min-width: 48rem) { .menu li:has(> .menu__klient) { margin-left: 0.5rem; } }
 
 .menu-tlacitko {
   display: none;
