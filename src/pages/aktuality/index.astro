@@ -1,0 +1,19 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Aktualita from '../../components/Aktualita.astro';
+
+const aktuality = (await getCollection('aktuality')).sort(
+  (a, b) => b.data.datum.getTime() - a.data.datum.getTime(),
+);
+---
+
+<Layout titulek="Aktuality">
+  <div class="uvod">
+    <h1>Aktuality</h1>
+    <p>Přehled všech oznámení výboru.</p>
+  </div>
+  <div class="aktuality">
+    {aktuality.map((a) => <Aktualita a={a} />)}
+  </div>
+</Layout>

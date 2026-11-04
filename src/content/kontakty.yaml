@@ -1,0 +1,22 @@
+# DŮLEŽITÉ KONTAKTY (správce, havarijní služby, úklid…)
+# Každý kontakt začíná řádkem s pomlčkou "- nazev:".
+# Pole popis, telefon, email a web jsou nepovinná.
+# Na webu se zobrazí ve stejném pořadí jako zde.
+
+- nazev: Správce domu – Správa nemovitostí s.r.o.
+  popis: Vyúčtování služeb, evidence vlastníků, předpisy záloh
+  telefon: +420 222 555 666
+  email: info@sprava-example.cz
+  web: https://www.example.cz
+
+- nazev: Havarijní služba (voda, topení)
+  popis: Nonstop, 24 hodin denně
+  telefon: +420 800 123 456
+
+- nazev: Servis výtahu
+  popis: Při uvíznutí ve výtahu použijte tlačítko v kabině
+  telefon: +420 777 888 999
+
+- nazev: Úklid společných prostor
+  popis: Úklid probíhá každé úterý a pátek
+  telefon: +420 733 222 111

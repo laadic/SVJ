@@ -1,0 +1,160 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { svj, formularAdresa } from '../nastaveni';
+import { tel } from '../utils';
+
+// Možnosti pro pole „Kde se závada nachází" – upravte podle svého domu
+const mista = [
+  'Můj byt',
+  'Chodba / schodiště',
+  'Výtah',
+  'Sklep / sklepní kóje',
+  'Půda',
+  'Vchod a zvonky',
+  'Dvůr / okolí domu',
+  'Jiné',
+];
+---
+
+<Layout titulek="Hlášení závad">
+  <div class="uvod">
+    <h1>Hlášení závad</h1>
+    <p>Všimli jste si poruchy ve společných prostorách nebo v bytě? Vyplňte formulář a výbor se vám ozve.</p>
+  </div>
+
+  <div class="havarie">
+    <span><strong>Havárie</strong> (únik vody, plynu, výpadek elektřiny) nehlaste formulářem – volejte ihned:</span>
+    <a href={`tel:${tel(svj.havarijniTelefon)}`}>{svj.havarijniTelefon}</a>
+  </div>
+
+  <div class="karta">
+    <form class="formular" id="formular-zavady" data-adresa={formularAdresa} data-email={svj.email} novalidate>
+      <div class="pole-radek">
+        <div class="pole">
+          <label for="jmeno">Jméno a příjmení <span class="povinne">*</span></label>
+          <input id="jmeno" name="jmeno" type="text" autocomplete="name" required />
+        </div>
+        <div class="pole">
+          <label for="byt">Číslo bytu <span class="napoveda">(nepovinné)</span></label>
+          <input id="byt" name="byt" type="text" inputmode="numeric" />
+        </div>
+      </div>
+
+      <div class="pole-radek">
+        <div class="pole">
+          <label for="email">E-mail <span class="povinne">*</span></label>
+          <input id="email" name="email" type="email" autocomplete="email" required />
+        </div>
+        <div class="pole">
+          <label for="telefon">Telefon <span class="napoveda">(nepovinné)</span></label>
+          <input id="telefon" name="telefon" type="tel" autocomplete="tel" />
+        </div>
+      </div>
+
+      <div class="pole">
+        <label for="misto">Kde se závada nachází <span class="povinne">*</span></label>
+        <select id="misto" name="misto" required>
+          <option value="">– vyberte –</option>
+          {mista.map((m) => <option>{m}</option>)}
+        </select>
+      </div>
+
+      <fieldset class="pole">
+        <legend>Naléhavost</legend>
+        <div class="volby">
+          <label class="volba"><input type="radio" name="nalehavost" value="Běžná" checked /><span>Běžná</span></label>
+          <label class="volba"><input type="radio" name="nalehavost" value="Spěchá" /><span>Spěchá</span></label>
+          <label class="volba"><input type="radio" name="nalehavost" value="Velmi naléhavá" /><span>Velmi naléhavá</span></label>
+        </div>
+      </fieldset>
+
+      <div class="pole">
+        <label for="popis">Popis závady <span class="povinne">*</span></label>
+        <textarea id="popis" name="popis" required placeholder="Co se stalo, kde přesně, odkdy…"></textarea>
+      </div>
+
+      <!-- Ochrana proti spamu: skryté pole, které člověk nevyplní -->
+      <div class="hp" aria-hidden="true">
+        <label>Nevyplňujte <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" /></label>
+      </div>
+
+      <label class="souhlas">
+        <input type="checkbox" name="souhlas" required />
+        <span>Souhlasím se zpracováním uvedených osobních údajů za účelem vyřízení hlášení. <span class="povinne">*</span></span>
+      </label>
+
+      <div id="zprava" role="status" aria-live="polite"></div>
+
+      <div>
+        <button class="tlacitko" type="submit">Odeslat hlášení</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById('formular-zavady') as HTMLFormElement;
+    const zprava = document.getElementById('zprava')!;
+    const tlacitko = form.querySelector<HTMLButtonElement>('button[type=submit]')!;
+
+    function ukaz(text: string, typ: 'ok' | 'chyba') {
+      zprava.className = `zprava zprava--${typ}`;
+      zprava.textContent = text;
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      if (!form.checkValidity()) {
+        const prvni = form.querySelector<HTMLElement>(':invalid');
+        prvni?.focus();
+        ukaz('Vyplňte prosím všechna povinná pole označená hvězdičkou a platný e-mail.', 'chyba');
+        return;
+      }
+
+      const data = new FormData(form);
+      if (data.get('_gotcha')) return; // spam
+
+      const adresa = form.dataset.adresa;
+
+      // Bez nastavené služby Formspree: otevře se e-mailový klient
+      if (!adresa) {
+        const telo = [
+          `Jméno: ${data.get('jmeno')}`,
+          `Byt: ${data.get('byt') || '-'}`,
+          `E-mail: ${data.get('email')}`,
+          `Telefon: ${data.get('telefon') || '-'}`,
+          `Místo: ${data.get('misto')}`,
+          `Naléhavost: ${data.get('nalehavost')}`,
+          '',
+          `${data.get('popis')}`,
+        ].join('\n');
+        const predmet = `Hlášení závady – ${data.get('misto')}`;
+        window.location.href =
+          `mailto:${form.dataset.email}?subject=${encodeURIComponent(predmet)}&body=${encodeURIComponent(telo)}`;
+        ukaz('Otevřeli jsme váš e-mailový program s připravenou zprávou. Stačí ji odeslat.', 'ok');
+        return;
+      }
+
+      tlacitko.disabled = true;
+      tlacitko.textContent = 'Odesílám…';
+      data.delete('souhlas');
+      data.append('_subject', `Hlášení závady – ${data.get('misto')}`);
+
+      try {
+        const odpoved = await fetch(adresa, {
+          method: 'POST',
+          body: data,
+          headers: { Accept: 'application/json' },
+        });
+        if (!odpoved.ok) throw new Error(String(odpoved.status));
+        form.reset();
+        ukaz('Děkujeme, hlášení bylo odesláno. Výbor se vám ozve co nejdříve.', 'ok');
+      } catch {
+        ukaz(`Odeslání se nepodařilo. Zkuste to prosím znovu nebo napište na ${form.dataset.email}.`, 'chyba');
+      } finally {
+        tlacitko.disabled = false;
+        tlacitko.textContent = 'Odeslat hlášení';
+      }
+    });
+  </script>
+</Layout>

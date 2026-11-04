@@ -1,0 +1,51 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import Aktualita from '../components/Aktualita.astro';
+import { svj } from '../nastaveni';
+import { url, tel } from '../utils';
+
+// Kolik aktualit zobrazit na úvodní stránce
+const POCET_NA_UVODU = 6;
+
+const vse = (await getCollection('aktuality')).sort(
+  (a, b) => b.data.datum.getTime() - a.data.datum.getTime(),
+);
+const aktuality = vse.slice(0, POCET_NA_UVODU);
+---
+
+<Layout titulek="Úvod">
+  <section class="hero">
+    <h1>Vítejte na webu {svj.kratkyNazev}</h1>
+    <p>Aktuální informace z domu, kontakty na výbor, dokumenty ke stažení a hlášení závad na jednom místě.</p>
+    <div class="hero__akce">
+      <a class="tlacitko" href={url('zavady/')}>Nahlásit závadu</a>
+      <a class="tlacitko tlacitko--obrys" href={url('dokumenty/')}>Dokumenty</a>
+    </div>
+  </section>
+
+  <div class="havarie">
+    <span><strong>Havárie</strong> (voda, plyn, elektřina) – volejte ihned:</span>
+    <a href={`tel:${tel(svj.havarijniTelefon)}`}>{svj.havarijniTelefon}</a>
+  </div>
+
+  <section>
+    <h2>Aktuality</h2>
+    {
+      aktuality.length === 0 ? (
+        <p class="slaby">Zatím zde nejsou žádné aktuality.</p>
+      ) : (
+        <div class="aktuality">
+          {aktuality.map((a) => <Aktualita a={a} />)}
+        </div>
+      )
+    }
+    {
+      vse.length > POCET_NA_UVODU && (
+        <p style="margin-top:1.25rem">
+          <a class="tlacitko tlacitko--svetle" href={url('aktuality/')}>Všechny aktuality ({vse.length})</a>
+        </p>
+      )
+    }
+  </section>
+</Layout>

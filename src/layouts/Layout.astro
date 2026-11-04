@@ -1,0 +1,92 @@
+---
+import '../styles/global.css';
+import { svj } from '../nastaveni';
+import { url, tel } from '../utils';
+
+interface Props {
+  titulek: string;
+  popis?: string;
+}
+const { titulek, popis = `Informace pro vlastníky jednotek – ${svj.nazev}` } = Astro.props;
+
+const menu = [
+  { text: 'Úvod', href: url('') },
+  { text: 'Výbor a kontakty', href: url('vybor/') },
+  { text: 'Dokumenty', href: url('dokumenty/') },
+  { text: 'Hlášení závad', href: url('zavady/') },
+];
+const aktualni = Astro.url.pathname.replace(/\/?$/, '/');
+const jeAktivni = (href: string) =>
+  href === url('') ? aktualni === href || aktualni.startsWith(url('aktuality/')) : aktualni.startsWith(href);
+---
+
+<!doctype html>
+<html lang="cs">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={popis} />
+    <link rel="icon" type="image/svg+xml" href={url('favicon.svg')} />
+    <title>{titulek} | {svj.kratkyNazev}</title>
+  </head>
+  <body>
+    <a class="skip" href="#obsah">Přeskočit na obsah</a>
+    <header class="hlavicka">
+      <div class="obal hlavicka__radek">
+        <a class="logo" href={url('')}>
+          <svg aria-hidden="true" viewBox="0 0 32 32" width="32" height="32">
+            <rect width="32" height="32" rx="8" fill="currentColor" />
+            <path d="M8 15 16 8l8 7v9h-5v-6h-6v6H8z" fill="#fff" />
+          </svg>
+          <span>{svj.kratkyNazev}</span>
+        </a>
+        <button class="menu-tlacitko" type="button" aria-expanded="false" aria-controls="menu">
+          <span class="menu-ikona" aria-hidden="true"></span>
+          <span class="sr">Menu</span>
+        </button>
+        <nav id="menu" class="menu" aria-label="Hlavní menu">
+          <ul>
+            {
+              menu.map((p) => (
+                <li>
+                  <a href={p.href} aria-current={jeAktivni(p.href) ? 'page' : undefined}>
+                    {p.text}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main id="obsah" class="obal">
+      <slot />
+    </main>
+
+    <footer class="paticka">
+      <div class="obal paticka__mrizka">
+        <div>
+          <strong>{svj.nazev}</strong><br />
+          {svj.adresa}<br />
+          IČO: {svj.ico}
+        </div>
+        <div>
+          E-mail: <a href={`mailto:${svj.email}`}>{svj.email}</a><br />
+          Účet: {svj.bankovniUcet}<br />
+          Havárie: <a href={`tel:${tel(svj.havarijniTelefon)}`}>{svj.havarijniTelefon}</a>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      const tlacitko = document.querySelector<HTMLButtonElement>('.menu-tlacitko');
+      const menu = document.getElementById('menu');
+      tlacitko?.addEventListener('click', () => {
+        const otevreno = tlacitko.getAttribute('aria-expanded') === 'true';
+        tlacitko.setAttribute('aria-expanded', String(!otevreno));
+        menu?.classList.toggle('otevreno', !otevreno);
+      });
+    </script>
+  </body>
+</html>
