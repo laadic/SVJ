@@ -3,6 +3,7 @@
 Neveřejná část webu pro vlastníky, nájemníky, správce a výbor. Běží na
 [Saltcornu](https://saltcorn.com) a instaluje se ze souboru
 [`svj-klientska-sekce.json`](svj-klientska-sekce.json) (tzv. balíček / pack).
+Ověřeno na Saltcornu 1.6.4 a 1.7.0-beta.3 (hostovaná verze na saltcorn.com).
 
 Co umí:
 
@@ -69,7 +70,7 @@ Níže `https://vase-aplikace.saltcorn.com` nahraďte adresou své aplikace.
 2. **Nainstalujte balíček.** Otevřete `https://vase-aplikace.saltcorn.com/packs/install`.
    Do pole vložte celý obsah souboru `svj-klientska-sekce.json`. Na GitHubu soubor otevřete,
    klikněte na **Raw** a zkopírujte vše (Ctrl+A, Ctrl+C). Potvrďte tlačítkem **Instalovat**.
-3. **Spusťte počáteční nastavení.** Otevřete `https://vase-aplikace.saltcorn.com/actions`,
+3. **Spusťte počáteční nastavení** (lze kdykoli zopakovat, vrátí menu do výchozího stavu klientské sekce). Otevřete `https://vase-aplikace.saltcorn.com/actions`,
    u triggeru `pocatecni_nastaveni` klikněte na **Testovací běh**. Nastaví se tím:
    - menu a domovské stránky podle rolí,
    - vypnutá veřejná registrace (účty jen na pozvánku),

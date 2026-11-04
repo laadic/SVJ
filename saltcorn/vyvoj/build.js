@@ -542,9 +542,22 @@ return f.odeslano ? { notify: "E-mail s fakturou byl odeslán na " + nastaveni.e
       { label: "Správa oznámení", type: "Page", pagename: "sprava_oznameni", min_role: ROLE.vybor },
       { label: "Nastavení schvalování", type: "Page", pagename: "nastaveni_schvalovani", min_role: ROLE.vybor },
     ] },
+    // Standardní položky Saltcornu (popisky Saltcorn sám přeloží do češtiny):
+    // administrace jen pro admina, uživatelské menu pro všechny přihlášené, přihlášení pro veřejnost
+    { label: "Settings", type: "Header", icon: "fas fa-wrench", min_role: "1", max_role: "1", location: "Standard", subitems: [
+      ["Users and security", "fas fa-users-cog"], ["About application", "fas fa-info"], ["Tables", "fas fa-table"],
+      ["Views", "far fa-eye"], ["Pages", "far fa-file"], ["Events", "fas fa-calendar-check"], ["Files", "far fa-images"],
+      ["Site structure", "fas fa-compass"], ["Modules", "fas fa-cubes"],
+    ].map(([admin_page, icon]) => ({ label: admin_page, type: "Admin Page", admin_page, icon, min_role: "1", max_role: "1", location: "Standard" })) },
+    { label: "User", type: "Header", icon: "far fa-user", min_role: "80", max_role: "1", location: "Standard", user_menu_header: true, subitems: [
+      { label: "User settings", type: "User Page", user_page: "User settings", icon: "fas fa-user-cog", min_role: "80", max_role: "1", location: "Standard" },
+      { label: "Logout", type: "User Page", user_page: "Logout", icon: "fas fa-sign-out-alt", min_role: "80", max_role: "1", location: "Standard" },
+    ] },
+    { label: "Login", type: "User Page", user_page: "Login", icon: "fas fa-sign-in-alt", min_role: "100", max_role: "100", location: "Standard" },
   ];
   await trig("pocatecni_nastaveni", "Never", null, `
-// Spusťte jednou po importu (Nastavení → Události → Triggery → pocatecni_nastaveni → Test run).
+// Spusťte jednou po importu (Nastavení → Události → Triggery → pocatecni_nastaveni → Testovací běh).
+// Lze spustit i opakovaně – menu a nastavení se jen přepíší na výchozí stav klientské sekce.
 await setConfig("menu_items", ${JSON.stringify(menu)});
 await setConfig("unrolled_menu_items", ${JSON.stringify(menu)});
 await setConfig("home_page_by_role", { "1": "uvod", "20": "uvod", "30": "uvod", "40": "uvod", "60": "uvod", "70": "uvod", "80": "bez_pristupu", "100": "vitejte" });

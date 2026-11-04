@@ -20,13 +20,13 @@ const check = (area, name, ok, detail = "") => {
   console.log(`${ok ? "OK  " : "FAIL"} [${area}] ${name}${detail ? " — " + String(detail).slice(0, 160) : ""}`);
 };
 
-async function session(b, email) {
+async function session(b, email, heslo = PW) {
   const ctx = await b.newContext({ viewport: { width: 1280, height: 900 } });
   const page = await ctx.newPage();
   if (email) {
     await page.goto(BASE + "/auth/login");
     await page.fill("input[name=email]", email);
-    await page.fill("input[name=password]", PW);
+    await page.fill("input[name=password]", heslo);
     await Promise.all([page.waitForNavigation(), page.click("form button[type=submit]")]);
     if (page.url().includes("/twofa/login/totp")) {
       await page.fill("input[name=code]", notp.gen(KEYS[email], { time: 30 }));
@@ -68,6 +68,7 @@ const lastMail = () => {
   for (const e of ["predseda", "mistopredseda", "clen", "spravce", "vlastnik1", "vlastnik2", "najemnik", "novy"])
     S[e] = await session(b, e + "@svj.test");
   S.public = await session(b, null);
+  S.admin = await session(b, "admin@svj.test", "Admin-Heslo-2026!");
 
   // ---------- 1. Přístup k pohledům podle rolí ----------
   const views = {
@@ -108,6 +109,13 @@ const lastMail = () => {
   check("menu", "správce: Evidence, bez faktur", mt.includes("Evidence") && !mt.includes("Faktury ke schválení"));
   mt = await menuText("predseda");
   check("menu", "výbor: Faktury ke schválení", mt.includes("Faktury ke schválení") && mt.includes("Evidence"));
+  mt = await menuText("vlastnik1");
+  check("menu", "vlastník má nastavení účtu a odhlášení", /Nastavení uživatele|User settings/.test(mt) && /Odhlásit|Logout/.test(mt));
+  check("menu", "vlastník nevidí administraci", !/Uživatelé a zabezpečení|Users and security/.test(mt));
+  mt = await menuText("admin");
+  check("menu", "admin vidí administraci (uživatelé, tabulky)", /Uživatelé a zabezpečení|Users and security/.test(mt) && /Tabulky|Tables/.test(mt));
+  mt = await menuText("public");
+  check("menu", "nepřihlášený má v menu přihlášení", /Přihlásit|Login/.test(mt) && !mt.includes("Faktury"));
   // české datum
   await S.vlastnik1.page.goto(BASE + "/page/uvod");
   const dnes = new Date(); const cz = `${dnes.getDate()}. ${dnes.getMonth() + 1}. ${dnes.getFullYear()}`;
