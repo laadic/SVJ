@@ -1,180 +1,23 @@
 # Web SVJ
 
-Jednoduchý web pro společenství vlastníků jednotek, postavený na [Astro](https://astro.build)
-a zveřejněný zdarma přes GitHub Pages.
+Web pro společenství vlastníků jednotek postavený na [Astro](https://astro.build). Zveřejňuje se
+zdarma přes GitHub Pages.
 
-Stránky: **Úvod s aktualitami**, **Výbor a kontakty**, **Dokumenty ke stažení**, **Hlášení závad**.
+- **Veřejný web:** https://laadic.github.io/SVJ/ (úvod s událostmi a aktualitami, výbor
+  a kontakty, dokumenty ke stažení, hlášení závad)
+- **Klientská sekce:** https://svjlipova.saltcorn.com (neveřejné dokumenty, evidence
+  jednotek, schvalování faktur, psaní příspěvků na web). Běží na Saltcornu.
 
-Adresa webu: **https://laadic.github.io/SVJ/**
+## Návody
 
-K webu patří neveřejná **klientská sekce** pro vlastníky, nájemníky, správce a výbor
-(neveřejné dokumenty, evidence jednotek, schvalování faktur). Běží na Saltcornu a návod
-k ní je v [saltcorn/README.md](saltcorn/README.md).
-
----
-
-## Kde co upravit
-
-Všechny texty jsou v obyčejných textových souborech. Programovat nemusíte.
-
-| Co chcete změnit | Soubor |
+| Návod | Pro koho |
 |---|---|
-| Název SVJ, adresa, IČO, e-mail, účet, havarijní telefon | `src/nastaveni.ts` |
-| Aktuality | složka `src/content/aktuality/` (jeden soubor = jedna aktualita) |
-| Členové výboru | `src/content/vybor.yaml` |
-| Další kontakty (správce, havárie, výtah…) | `src/content/kontakty.yaml` |
-| Seznam dokumentů | `src/content/dokumenty.yaml` |
-| Samotné soubory ke stažení (PDF…) | složka `public/dokumenty/` |
-| Odesílání formuláře závad | `src/nastaveni.ts` → `formularAdresa` |
-| Tlačítko „Klientská sekce“ (adresa Saltcornu) | `src/nastaveni.ts` → `klientskaSekce` |
-| Volby „Kde se závada nachází“ | `src/pages/zavady.astro` → seznam `mista` |
-| Barvy webu | začátek souboru `src/styles/global.css` |
+| **[NAVOD.md](NAVOD.md)** | Pro každého, kdo web upravuje. Úpravy na GitHubu krok za krokem, aktuality a události, texty a nové stránky, uvedení do ostrého provozu, řešení potíží. |
+| **[saltcorn/README.md](saltcorn/README.md)** | Pro výbor a admina klientské sekce. Instalace, pozvání uživatelů, role, schvalování faktur, příspěvky na web, bezpečnost. |
+| [saltcorn/vyvoj/README.md](saltcorn/vyvoj/README.md) | Pro vývojáře. Sestavení a automatické testy klientské sekce. |
 
-Každý soubor má na začátku komentář s návodem.
-
----
-
-## Jak web upravit přímo na GitHubu (nic neinstalujete)
-
-1. Otevřete repozitář na github.com a proklikejte se k souboru (např. `src/content/vybor.yaml`).
-2. Vpravo nahoře klikněte na ikonu **tužky** (Edit this file).
-3. Text upravte.
-4. Klikněte na zelené **Commit changes…** a potvrďte.
-5. Za 1–2 minuty se změna sama objeví na webu.
-
-Průběh zveřejnění uvidíte v záložce **Actions**: žlutá tečka znamená, že se web právě
-sestavuje, zelená fajfka hotovo, červený křížek chybu (viz [Když se web neaktualizuje](#když-se-web-neaktualizuje)).
-
-### Přidat aktualitu
-
-1. Otevřete složku `src/content/aktuality/` → **Add file** → **Create new file**.
-2. Soubor pojmenujte např. `2027-01-15-odstavka-vody.md`. Použijte malá písmena
-   bez diakritiky a místo mezer pomlčky. Na konci musí být `.md`.
-3. Zkopírujte obsah souboru `_sablona.md` ze stejné složky a přepište ho:
-
-```markdown
----
-nadpis: "Upozornění: odstávka vody"
-datum: 2027-01-15
-perex: Krátké shrnutí, které se ukáže na úvodní stránce.
-dulezite: true
----
-
-Text aktuality. Odstavce oddělte prázdným řádkem.
-```
-
-- `datum` pište ve tvaru **rok-měsíc-den**. Aktuality se řadí od nejnovější.
-- `dulezite: true` přidá oranžový štítek „Důležité“. Pokud ho nechcete, řádek smažte.
-- Na úvodní stránce se zobrazí 6 nejnovějších aktualit, ostatní najdete v jejich přehledu.
-
-**Smazání aktuality:** otevřete její soubor → menu **…** vpravo nahoře → **Delete file**.
-
-### Formátování textu (Markdown)
-
-| Napíšete | Na webu |
-|---|---|
-| `**tučně**` | **tučně** |
-| `*kurzíva*` | *kurzíva* |
-| `- položka` | odrážka v seznamu |
-| `## Mezititulek` | mezititulek |
-| `[text odkazu](https://www.example.cz)` | odkaz na jiný web |
-| `[hlášení závad](../../zavady/)` | odkaz na stránku tohoto webu |
-| `[stanovy](../../dokumenty/stanovy.pdf)` | odkaz na dokument |
-
-### Upravit výbor nebo kontakty
-
-Otevřete `src/content/vybor.yaml` nebo `src/content/kontakty.yaml`. Každá osoba nebo kontakt
-začíná pomlčkou, ostatní řádky jsou odsazené **dvěma mezerami**:
-
-```yaml
-- jmeno: Jan Novák
-  funkce: Předseda výboru
-  email: predseda@svj-lipova.cz
-  telefon: +420 601 111 222
-```
-
-Na webu se zobrazí ve stejném pořadí jako v souboru. Nepovinné řádky (e-mail, telefon,
-poznámka…) můžete smazat.
-
-### Přidat dokument
-
-1. Otevřete složku `public/dokumenty/` → **Add file** → **Upload files** a nahrajte soubor.
-   Název souboru pište bez diakritiky a mezer, např. `zapis-shromazdeni-2027.pdf`.
-2. Do `src/content/dokumenty.yaml` přidejte záznam:
-
-```yaml
-- nazev: Zápis ze shromáždění vlastníků 2027
-  soubor: zapis-shromazdeni-2027.pdf
-  kategorie: Shromáždění vlastníků
-  datum: 2027-05-20
-```
-
-Dokumenty se na webu seskupí podle `kategorie`. Novou kategorii vytvoříte tak, že ji
-prostě napíšete.
-
-Ukázkové PDF ve složce `public/dokumenty/` nahraďte skutečnými dokumenty, nebo je smažte
-i se záznamy v `dokumenty.yaml`.
-
-**Pozor:** dokumenty na webu může stáhnout kdokoli. Nezveřejňujte nic s osobními údaji
-(seznamy vlastníků, telefony, dlužníky…), pokud k tomu nemáte souhlas.
-
-### Pravidla pro soubory `.yaml`
-
-- Odsazujte **mezerami**, ne tabulátorem.
-- Obsahuje-li text dvojtečku s mezerou (`: `) nebo znak `#`, dejte ho do uvozovek:
-  `popis: "Úklid: úterý a pátek"`.
-
----
-
-## Formulář pro hlášení závad
-
-GitHub Pages umí zobrazovat jen hotové stránky a e-maily sám neodešle. Proto má formulář
-dva režimy:
-
-- **Bez nastavení (výchozí):** po vyplnění se otevře e-mailový program návštěvníka
-  s připravenou zprávou na e-mail výboru. Funguje hned, ale návštěvník musí zprávu
-  sám odeslat.
-- **Se službou Formspree (doporučeno):** hlášení přijde výboru e-mailem rovnou
-  po kliknutí na „Odeslat“.
-  1. Zaregistrujte se na [formspree.io](https://formspree.io) e-mailem výboru.
-     Bezplatný tarif stačí pro desítky hlášení měsíčně.
-  2. Vytvořte nový formulář (New form) a zkopírujte jeho adresu,
-     např. `https://formspree.io/f/abcdwxyz`.
-  3. V `src/nastaveni.ts` ji vložte do `formularAdresa`:
-     `export const formularAdresa = 'https://formspree.io/f/abcdwxyz';`
-  4. Uložte změnu a po zveřejnění odešlete zkušební hlášení. Ověřte, že dorazilo
-     (zkontrolujte i složku se spamem).
-
----
-
-## První zveřejnění webu (jen jednou)
-
-1. Na GitHubu otevřete **Settings** → **Pages**.
-2. U **Source** vyberte **GitHub Actions**.
-3. Změny musí být ve větvi `main`. Web se zveřejní automaticky po každé změně v `main`
-   (spustit ručně ho můžete v **Actions** → **Zveřejnit web** → **Run workflow**).
-
-### Vlastní doména (nepovinné)
-
-Chcete-li adresu typu `www.svj-lipova.cz`:
-
-1. V `astro.config.mjs` nastavte `site: 'https://www.svj-lipova.cz'` a `base: '/'`.
-2. V **Settings** → **Pages** → **Custom domain** zadejte doménu a u svého registrátora
-   domény nastavte DNS podle [návodu GitHubu](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site) (anglicky).
-
----
-
-## Když se web neaktualizuje
-
-Otevřete záložku **Actions** a klikněte na poslední běh s červeným křížkem, pak na krok
-**build**. V popisu chyby najdete soubor a řádek, kde je problém. Nejčastější příčiny:
-
-- chybí odsazení nebo je použit tabulátor v souboru `.yaml`,
-- text s dvojtečkou není v uvozovkách,
-- datum není ve tvaru `2027-01-15`,
-- dokument uvedený v `dokumenty.yaml` není nahraný ve `public/dokumenty/` (chyba to napíše česky).
-
-Dokud chybu neopravíte, zůstává na webu poslední funkční verze. Nic se nerozbije.
+Každá změna ve větvi `main` se do 1–2 minut sama zveřejní (GitHub Actions →
+**Zveřejnit web**).
 
 ---
 
@@ -196,13 +39,20 @@ Web pak běží na http://localhost:4321/SVJ/ a po uložení souboru se sám obn
 ### Struktura projektu
 
 ```
-public/            soubory, které se zkopírují beze změny (dokumenty, ikona)
+public/                 soubory, které se zkopírují beze změny (dokumenty, ikona)
 src/
-  nastaveni.ts     základní údaje o SVJ a adresa formuláře
-  content/         obsah: aktuality, výbor, kontakty, dokumenty
-  pages/           jednotlivé stránky webu
-  layouts/         společná hlavička, menu a patička
-  styles/          vzhled (CSS)
-.github/workflows/ automatické zveřejnění na GitHub Pages
-saltcorn/          klientská sekce: balíček pro Saltcorn, návod a vývojové skripty
+  nastaveni.ts          základní údaje o SVJ, adresa formuláře a klientské sekce
+  content/              obsah: aktuality (.md), výbor, kontakty, dokumenty (.yaml)
+  pages/                stránky webu (.astro, případně textové stránky .md)
+  layouts/              Layout.astro (hlavička, menu, patička), TextovaStranka.astro
+  components/           karty aktualit, seznamy aktualit a událostí
+  prispevky.ts          načtení a bezpečné vykreslení příspěvků z klientské sekce
+  prispevky-klient.ts   obnovení příspěvků v prohlížeči (nový příspěvek je vidět hned)
+  styles/global.css     vzhled a barvy
+.github/workflows/      automatické zveřejnění na GitHub Pages
+saltcorn/               klientská sekce: balíček pro Saltcorn, návod a vývojové skripty
 ```
+
+Příspěvky z klientské sekce se načítají z `<klientskaSekce>/api/action/verejne_prispevky`.
+Načtou se při sestavení webu (pro návštěvníky bez JavaScriptu) a znovu v prohlížeči.
+Když klientská sekce neodpovídá, web ukáže stav z posledního sestavení.

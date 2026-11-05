@@ -6,7 +6,7 @@ const out = process.argv[2] || require("path").join(__dirname, "../svj-klientska
 (async () => {
   await sc.init();
   const { Table, View, Page, Trigger, Role } = sc;
-  const tabulky = ["oznameni", "dokumenty", "dokumenty_vyboru", "jednotky", "vlastnici", "vlastnictvi", "faktury", "schvaleni", "nastaveni_portalu"];
+  const tabulky = ["oznameni", "dokumenty", "dokumenty_vyboru", "jednotky", "vlastnici", "vlastnictvi", "faktury", "schvaleni", "nastaveni_portalu", "web_prispevky"];
   const p = { tables: [], views: [], plugins: [], pages: [], page_groups: [], roles: [], library: [], triggers: [], tags: [], models: [], model_instances: [], event_logs: [] };
   for (const t of tabulky) p.tables.push(await pack.table_pack(t));
   // z tabulky uživatelů jen vlastní pole "jmeno" (vestavěná pole se nemění)

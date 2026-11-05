@@ -1,17 +1,18 @@
 ---
-import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
-import Aktualita from '../components/Aktualita.astro';
-import { svj } from '../nastaveni';
+import SeznamAktualit from '../components/SeznamAktualit.astro';
+import SeznamUdalosti from '../components/SeznamUdalosti.astro';
+import ObnovaPrispevku from '../components/ObnovaPrispevku.astro';
+import { svj, klientskaSekce } from '../nastaveni';
+import { nacistPriSestaveni } from '../prispevky';
 import { url, tel } from '../utils';
 
-// Kolik aktualit zobrazit na úvodní stránce
-const POCET_NA_UVODU = 6;
+// Kolik aktualit a událostí zobrazit na úvodní stránce
+const POCET_AKTUALIT = 6;
+const POCET_UDALOSTI = 4;
 
-const vse = (await getCollection('aktuality')).sort(
-  (a, b) => b.data.datum.getTime() - a.data.datum.getTime(),
-);
-const aktuality = vse.slice(0, POCET_NA_UVODU);
+// Příspěvky z klientské sekce (při sestavení webu; v prohlížeči se pak obnoví)
+const prispevky = (await nacistPriSestaveni(klientskaSekce)) ?? [];
 ---
 
 <Layout titulek="Úvod">
@@ -29,23 +30,13 @@ const aktuality = vse.slice(0, POCET_NA_UVODU);
     <a href={`tel:${tel(svj.havarijniTelefon)}`}>{svj.havarijniTelefon}</a>
   </div>
 
-  <section>
+  <SeznamUdalosti prispevky={prispevky} limit={POCET_UDALOSTI}>
+    <h2>Plánované události</h2>
+  </SeznamUdalosti>
+
+  <SeznamAktualit prispevky={prispevky} limit={POCET_AKTUALIT} odkazNaVse>
     <h2>Aktuality</h2>
-    {
-      aktuality.length === 0 ? (
-        <p class="slaby">Zatím zde nejsou žádné aktuality.</p>
-      ) : (
-        <div class="aktuality">
-          {aktuality.map((a) => <Aktualita a={a} />)}
-        </div>
-      )
-    }
-    {
-      vse.length > POCET_NA_UVODU && (
-        <p style="margin-top:1.25rem">
-          <a class="tlacitko tlacitko--svetle" href={url('aktuality/')}>Všechny aktuality ({vse.length})</a>
-        </p>
-      )
-    }
-  </section>
+  </SeznamAktualit>
+
+  <ObnovaPrispevku />
 </Layout>

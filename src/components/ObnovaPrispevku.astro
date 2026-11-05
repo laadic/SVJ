@@ -1,0 +1,11 @@
+---
+// Po načtení stránky stáhne aktuální příspěvky z klientské sekce (src/prispevky-klient.ts).
+import { klientskaSekce } from '../nastaveni';
+---
+
+{klientskaSekce && <div data-klientska-sekce={klientskaSekce} hidden />}
+
+<script>
+  import { obnovitPrispevky } from '../prispevky-klient';
+  obnovitPrispevky();
+</script>

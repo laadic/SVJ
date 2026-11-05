@@ -1,12 +1,23 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { url, datum } from '../utils';
+import { klicRazeni } from '../prispevky';
 
-interface Props { a: CollectionEntry<'aktuality'> }
-const { a } = Astro.props;
+// Karta aktuality ze souboru (src/content/aktuality). Aktuality z klientské sekce
+// mají stejný vzhled – vykresluje je funkce kartaAktuality v src/prispevky.ts.
+interface Props {
+  a: CollectionEntry<'aktuality'>;
+  skryta?: boolean;
+}
+const { a, skryta = false } = Astro.props;
 ---
 
-<article class:list={['karta', 'aktualita', { 'aktualita--dulezita': a.data.dulezite }]}>
+<article
+  class:list={['karta', 'aktualita', { 'aktualita--dulezita': a.data.dulezite }]}
+  data-razeni={klicRazeni(a.data.datum.toISOString().slice(0, 10))}
+  data-zdroj="soubor"
+  hidden={skryta}
+>
   <div class="aktualita__hlava">
     <time class="datum" datetime={a.data.datum.toISOString()}>{datum(a.data.datum)}</time>
     {a.data.dulezite && <span class="stitek">Důležité</span>}

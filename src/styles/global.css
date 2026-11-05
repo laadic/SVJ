@@ -203,6 +203,38 @@ a:hover { color: var(--barva-hlavni-tmava); }
 .aktualita--dulezita { border-left: 4px solid var(--barva-varovani); }
 .aktualita__hlava { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
 
+[hidden] { display: none !important; }
+.sekce__vice { margin-top: 1.25rem; }
+
+/* ---------- Události a příspěvky z klientské sekce ---------- */
+.sekce-udalosti { margin-bottom: 2.5rem; }
+[data-aktuality] + .sekce-udalosti { margin-top: 2.5rem; }
+.udalosti { display: grid; gap: 1rem; }
+@media (min-width: 48rem) { .udalosti { grid-template-columns: 1fr 1fr; } }
+.udalost { display: flex; gap: 1rem; align-items: flex-start; }
+.udalost--dulezita { border-left: 4px solid var(--barva-varovani); }
+.udalost__datum {
+  flex-shrink: 0;
+  width: 4rem;
+  padding: 0.45rem 0.25rem;
+  border-radius: 10px;
+  background: var(--barva-hlavni-svetla);
+  color: var(--barva-hlavni-tmava);
+  text-align: center;
+  line-height: 1.1;
+}
+.udalost__den { display: block; font-size: 1.6rem; font-weight: 700; }
+.udalost__mesic { display: block; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; }
+.udalost__obsah { flex: 1; min-width: 0; }
+.udalost h3 { margin: 0 0 0.25rem; font-size: 1.15rem; }
+.udalost__kdy { margin: 0 0 0.5rem; color: var(--text-slaby); font-size: 0.95rem; }
+.udalost__obsah > p:last-child { margin-bottom: 0; }
+.vice { margin-top: 0.6rem; }
+.vice summary { cursor: pointer; color: var(--barva-hlavni); font-weight: 600; }
+.vice summary:hover { color: var(--barva-hlavni-tmava); }
+.vice .obsah { margin-top: 0.6rem; }
+.aktualita .vice .obsah p, .udalost .vice .obsah p { margin: 0 0 0.75em; color: var(--text); }
+
 .clanek { max-width: 44rem; }
 .clanek .obsah { font-size: 1.0625rem; }
 .clanek .obsah ul, .clanek .obsah ol { padding-left: 1.25rem; }
