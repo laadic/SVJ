@@ -1,0 +1,21 @@
+---
+// Šablona pro jednoduché textové stránky psané v Markdownu (soubory .md ve složce src/pages).
+// Na začátku souboru stačí uvést:
+//   ---
+//   layout: ../layouts/TextovaStranka.astro
+//   titulek: Historie domu
+//   popis: Krátký popis pro vyhledávače (nepovinné)
+//   ---
+import Layout from './Layout.astro';
+
+const { frontmatter } = Astro.props;
+---
+
+<Layout titulek={frontmatter.titulek} popis={frontmatter.popis}>
+  <article class="clanek">
+    <h1>{frontmatter.titulek}</h1>
+    <div class="karta obsah">
+      <slot />
+    </div>
+  </article>
+</Layout>

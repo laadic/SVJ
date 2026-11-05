@@ -163,7 +163,7 @@ Pohlídejte si:
 - **Dvoufaktorové ověřování u výboru a správce.** Saltcorn ho při přihlášení vyžádá, ale výzvu
   jde přeskočit. Schvalování faktur ho proto vyžaduje sám, u ostatních funkcí dohlédněte,
   aby si ho všichni zapnuli.
-- **Zálohy.** Jednou měsíčně si stáhněte zálohu: **Nastavení → Záloha → Stáhnout zálohu**.
+- **Zálohy.** Jednou měsíčně si stáhněte zálohu: **Nastavení → O aplikaci → Záloha → Stáhnout zálohu**.
 - **Osobní údaje (GDPR).** Evidence obsahuje osobní údaje vlastníků a SVJ je jejich správcem.
   Ověřte si u provozovatele saltcorn.com podmínky zpracování a kde jsou data uložena.
   Do dokumentů pro vlastníky nedávejte osobní údaje jiných lidí bez právního důvodu.
