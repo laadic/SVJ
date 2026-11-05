@@ -1,19 +1,31 @@
 ---
-import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
-import Aktualita from '../../components/Aktualita.astro';
+import SeznamAktualit from '../../components/SeznamAktualit.astro';
+import SeznamUdalosti from '../../components/SeznamUdalosti.astro';
+import ObnovaPrispevku from '../../components/ObnovaPrispevku.astro';
+import { klientskaSekce } from '../../nastaveni';
+import { nacistPriSestaveni } from '../../prispevky';
 
-const aktuality = (await getCollection('aktuality')).sort(
-  (a, b) => b.data.datum.getTime() - a.data.datum.getTime(),
-);
+const prispevky = (await nacistPriSestaveni(klientskaSekce)) ?? [];
 ---
 
-<Layout titulek="Aktuality">
+<Layout titulek="Aktuality a události">
   <div class="uvod">
-    <h1>Aktuality</h1>
-    <p>Přehled všech oznámení výboru.</p>
+    <h1>Aktuality a události</h1>
+    <p>Všechna oznámení výboru a přehled událostí v domě.</p>
   </div>
-  <div class="aktuality">
-    {aktuality.map((a) => <Aktualita a={a} />)}
-  </div>
+
+  <SeznamUdalosti prispevky={prispevky}>
+    <h2>Plánované události</h2>
+  </SeznamUdalosti>
+
+  <SeznamAktualit prispevky={prispevky}>
+    <h2>Aktuality</h2>
+  </SeznamAktualit>
+
+  <SeznamUdalosti prispevky={prispevky} druh="probehle">
+    <h2>Proběhlé události</h2>
+  </SeznamUdalosti>
+
+  <ObnovaPrispevku />
 </Layout>

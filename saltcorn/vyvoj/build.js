@@ -25,9 +25,11 @@ const ulozit = (label = "Uložit") => ({
 });
 
 // Edit pohled: items = [{f, label, fv}]
+// Datová pole ve formulářích používají nativní výběr data/času prohlížeče (date_picker)
+const vyberData = (fv) => (fv === "edit" || fv === "editDay" ? { date_picker: true } : {});
 const editCfg = (items, opts = {}) => ({
-  columns: items.map((i) => ({ type: "Field", field_name: i.f, fieldview: i.fv, configuration: {} })),
-  layout: { above: [...(opts.intro ? [lbl(opts.intro, { textStyle: "" })] : []), ...items.map((i) => radek(i.label, fEl(i.f, i.fv), i.f)), ulozit(opts.saveLabel)] },
+  columns: items.map((i) => ({ type: "Field", field_name: i.f, fieldview: i.fv, configuration: { ...(i.datum ? vyberData(i.fv) : {}), ...(i.cfg || {}) } })),
+  layout: { above: [...(opts.intro ? [lbl(opts.intro, { textStyle: "" })] : []), ...items.map((i) => radek(i.label, fEl(i.f, i.fv, { configuration: { ...(i.datum ? vyberData(i.fv) : {}), ...(i.cfg || {}) } }), i.f)), ulozit(opts.saveLabel)] },
   fixed: opts.fixed || {},
   destination_type: !opts.dest ? "Back to referer" : opts.dest.startsWith("page:") ? "Page" : "View",
   ...(opts.dest && opts.dest.startsWith("page:") ? { page_when_done: opts.dest.slice(5) } : { view_when_done: opts.dest }),
@@ -100,7 +102,7 @@ const kod = (s) => s.replace(/^\n/, "");
   // ---------- Oznámení ----------
   await vytvorTabulku("oznameni", { min_role_read: ROLE.najemnik, min_role_write: ROLE.vybor, description: "Oznámení pro přihlášené (nájemníci a výš)" }, [
     { name: "nadpis", label: "Nadpis", type: "String", required: true },
-    { name: "datum", label: "Datum", type: "Date", required: true, attributes: { default_expression: "new Date()" } },
+    { name: "datum", label: "Datum", type: "Date", required: false, attributes: { day_only: true } },
     { name: "text", label: "Text", type: "String", required: true },
   ]);
 
@@ -109,7 +111,7 @@ const kod = (s) => s.replace(/^\n/, "");
   await vytvorTabulku("dokumenty", { min_role_read: ROLE.vlastnik, min_role_write: ROLE.spravce, description: "Neveřejné dokumenty SVJ pro vlastníky" }, [
     { name: "nazev", label: "Název", type: "String", required: true },
     { name: "kategorie", label: "Kategorie", type: "String", required: true, attributes: { options: kategorie } },
-    { name: "datum", label: "Datum", type: "Date", required: false },
+    { name: "datum", label: "Datum", type: "Date", required: false, attributes: { day_only: true } },
     { name: "popis", label: "Popis", type: "String", required: false },
     { name: "soubor", label: "Soubor", type: "File", required: true, attributes: { min_role_read: ROLE.vlastnik, folder: "dokumenty", also_delete_file: true } },
   ]);
@@ -117,7 +119,7 @@ const kod = (s) => s.replace(/^\n/, "");
   // ---------- Interní dokumenty výboru ----------
   await vytvorTabulku("dokumenty_vyboru", { min_role_read: ROLE.vybor, min_role_write: ROLE.vybor, description: "Interní dokumenty výboru" }, [
     { name: "nazev", label: "Název", type: "String", required: true },
-    { name: "datum", label: "Datum", type: "Date", required: false },
+    { name: "datum", label: "Datum", type: "Date", required: false, attributes: { day_only: true } },
     { name: "popis", label: "Popis", type: "String", required: false },
     { name: "soubor", label: "Soubor", type: "File", required: true, attributes: { min_role_read: ROLE.vybor, folder: "vybor", also_delete_file: true } },
   ]);
@@ -148,7 +150,7 @@ const kod = (s) => s.replace(/^\n/, "");
     { name: "jednotka", label: "Jednotka", type: "Key to jednotky", required: true, attributes: { min_role_write: ROLE.spravce, summary_field: "cislo", on_delete: "Cascade" } },
     { name: "vlastnik", label: "Vlastník", type: "Key to vlastnici", required: true, attributes: { min_role_write: ROLE.spravce, summary_field: "jmeno", fkey_error_msg: "Vlastníka nelze smazat, dokud je u něj evidována jednotka." } },
     { name: "podil_na_jednotce", label: "Podíl na jednotce", type: "String", required: false, attributes: { min_role_write: ROLE.spravce } },
-    { name: "od", label: "Vlastníkem od", type: "Date", required: false, attributes: { min_role_write: ROLE.spravce } },
+    { name: "od", label: "Vlastníkem od", type: "Date", required: false, attributes: { min_role_write: ROLE.spravce, day_only: true } },
   ]);
   const vlastnictvi = Table.findOne({ name: "vlastnictvi" });
   await vlastnictvi.update({ ownership_formula: "vlastnik?.uzivatel===user.id /* Inherit vlastnik */" });
@@ -159,7 +161,7 @@ const kod = (s) => s.replace(/^\n/, "");
     { name: "dodavatel", label: "Dodavatel", type: "String", required: true },
     { name: "cislo", label: "Číslo faktury / VS", type: "String", required: false },
     { name: "castka", label: "Částka (Kč)", type: "Float", required: false, attributes: { decimal_places: 2 } },
-    { name: "splatnost", label: "Splatnost", type: "Date", required: false },
+    { name: "splatnost", label: "Splatnost", type: "Date", required: false, attributes: { day_only: true } },
     { name: "popis", label: "Za co / poznámka", type: "String", required: false },
     { name: "soubor", label: "PDF faktury", type: "File", required: true, attributes: { min_role_read: ROLE.vybor, folder: "faktury", files_accept_filter: ".pdf,application/pdf" } },
     { name: "stav", label: "Stav", type: "String", required: false, attributes: { ...sys, options: `${CEKA},Schváleno,Zamítnuto` } },
@@ -186,13 +188,28 @@ const kod = (s) => s.replace(/^\n/, "");
     { name: "pocet_schvaleni", label: "Počet potřebných schválení", type: "Integer", required: true, attributes: { min: 2 } },
   ]);
 
+  // ---------- Příspěvky a události pro veřejný web ----------
+  // Tabulka je neveřejná (koncepty!). Web dostává jen zveřejněné příspěvky přes trigger "verejne_prispevky".
+  await vytvorTabulku("web_prispevky", { min_role_read: ROLE.vybor, min_role_write: ROLE.vybor, description: "Aktuality a události pro veřejný web; koncepty web nezobrazí" }, [
+    { name: "typ", label: "Druh", type: "String", required: true, attributes: { options: "Aktualita,Událost" } },
+    { name: "nadpis", label: "Nadpis", type: "String", required: true },
+    { name: "datum", label: "Datum zveřejnění", type: "Date", required: false, attributes: { day_only: true } },
+    { name: "zacatek", label: "Datum události", type: "Date", required: false, attributes: { day_only: true } },
+    { name: "cas", label: "Čas události", type: "String", required: false },
+    { name: "misto", label: "Místo konání", type: "String", required: false },
+    { name: "perex", label: "Krátké shrnutí", type: "String", required: false },
+    { name: "text", label: "Text", type: "String", required: false },
+    { name: "dulezite", label: "Důležité (zvýraznit)", type: "Bool", required: false },
+    { name: "koncept", label: "Koncept – zatím nezveřejňovat", type: "Bool", required: false },
+  ]);
+
   await sc.getState().refresh_tables();
   const T = (name) => Table.findOne({ name });
 
   // ---------- Triggery ----------
-  const trig = async (name, when_trigger, tableName, code, description, action = "run_js_code", configuration) =>
+  const trig = async (name, when_trigger, tableName, code, description, action = "run_js_code", configuration, min_role) =>
     Trigger.create({
-      name, when_trigger, description, action,
+      name, when_trigger, description, action, ...(min_role ? { min_role } : {}),
       table_id: tableName ? T(tableName).id : null,
       configuration: configuration || { code: kod(code), run_where: "Server" },
     });
@@ -307,6 +324,35 @@ if (!/^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$/.test(String(row.email_faktury || "").trim(
 if (!(Number(row.pocet_schvaleni) >= 2)) return { error: "Fakturu musí schválit alespoň 2 členové výboru." };
 `, "Jediný záznam nastavení, platný e-mail, aspoň 2 schválení.");
 
+  await trig("web_prispevky_kontrola", "Validate", "web_prispevky", `
+// Datum zveřejnění se doplní samo, událost musí mít datum, čas se sjednotí na tvar 18:00.
+const doplnit = {};
+if (!row.datum) doplnit.datum = new Date();
+if (row.typ === "Událost" && !row.zacatek) return { error: "U události vyplňte začátek – datum události." };
+if (row.cas !== undefined && row.cas !== null && String(row.cas).trim() !== "") {
+  const m = String(row.cas).trim().match(/^(\\d{1,2})(?:[:.](\\d{2}))?(?:\\s*h(?:od)?\\.?)?$/i);
+  if (!m || +m[1] > 23 || +(m[2] || 0) > 59) return { error: "Čas zadejte například jako 18:00." };
+  const cas = String(+m[1]).padStart(2, "0") + ":" + (m[2] || "00");
+  if (cas !== row.cas) doplnit.cas = cas;
+}
+if (Object.keys(doplnit).length) return { set_fields: doplnit };
+`, "Doplní datum zveřejnění, u události vyžaduje datum a kontroluje formát času.");
+
+  await trig("oznameni_kontrola", "Validate", "oznameni", `
+if (!row.datum) return { set_fields: { datum: new Date() } };
+`, "Oznámení bez data dostane dnešní datum.");
+
+  await trig("verejne_prispevky", "API call", null, `
+// Veřejný seznam pro web SVJ: jen zveřejněné příspěvky (bez konceptů) a jen veřejné údaje.
+// Adresa: /api/action/verejne_prispevky
+const T = Table.findOne({ name: "web_prispevky" });
+const radky = await T.getRows({}, { orderBy: "datum", orderDesc: true, limit: 300 });
+return radky.filter((r) => !r.koncept).map((r) => ({
+  id: r.id, typ: r.typ, nadpis: r.nadpis, perex: r.perex || "", text: r.text || "",
+  datum: r.datum, zacatek: r.zacatek || null, cas: r.cas || "", misto: r.misto || "", dulezite: !!r.dulezite,
+}));
+`, "Veřejný seznam zveřejněných příspěvků a událostí pro web (volá ho web SVJ).", "run_js_code", undefined, ROLE.public);
+
   // ---------- Pohledy ----------
   const view = async (name, table, viewtemplate, min_role, configuration, description) =>
     View.create({ name, table_id: table ? T(table).id : null, viewtemplate, min_role, configuration, description: description || "" });
@@ -317,7 +363,7 @@ if (!(Number(row.pocet_schvaleni) >= 2)) return { error: "Fakturu musí schváli
     layout: { above: [fEl("datum", "format", { textStyle: "text-muted", configuration: { format: DEN } }), fEl("nadpis", "as_text", { textStyle: "h5" }), fEl("text", "preFormatted")] },
   });
   await view("oznameni_upravit", "oznameni", "Edit", ROLE.vybor, editCfg([
-    { f: "nadpis", label: "Nadpis", fv: "edit" }, { f: "datum", label: "Datum", fv: "editDay" }, { f: "text", label: "Text", fv: "textarea" },
+    { f: "nadpis", label: "Nadpis", fv: "edit" }, { f: "datum", label: "Datum", fv: "editDay", datum: true }, { f: "text", label: "Text", fv: "textarea" },
   ], { dest: "page:sprava_oznameni" }));
   await view("oznameni_prehled", "oznameni", "Feed", ROLE.najemnik, feedCfg("oznameni_karta", { order: "datum", desc: true }), "Oznámení pro přihlášené");
   await view("oznameni_sprava", "oznameni", "List", ROLE.vybor, listCfg([
@@ -327,7 +373,7 @@ if (!(Number(row.pocet_schvaleni) >= 2)) return { error: "Fakturu musí schváli
   // Dokumenty SVJ
   const dokItems = [
     { f: "nazev", label: "Název", fv: "edit" }, { f: "kategorie", label: "Kategorie", fv: "edit" },
-    { f: "datum", label: "Datum", fv: "editDay" }, { f: "popis", label: "Popis", fv: "edit" }, { f: "soubor", label: "Soubor", fv: "upload" },
+    { f: "datum", label: "Datum", fv: "editDay", datum: true }, { f: "popis", label: "Popis", fv: "edit" }, { f: "soubor", label: "Soubor", fv: "upload" },
   ];
   await view("dokumenty_upravit", "dokumenty", "Edit", ROLE.spravce, editCfg(dokItems, { dest: "page:sprava_dokumentu" }));
   await view("dokument_karta", "dokumenty", "Show", ROLE.vlastnik, kartaCfg({ f: "nazev" }, [
@@ -355,7 +401,7 @@ if (!(Number(row.pocet_schvaleni) >= 2)) return { error: "Fakturu musí schváli
   ], { dest: "page:evidence_jednotek" }));
   await view("vlastnictvi_upravit", "vlastnictvi", "Edit", ROLE.spravce, editCfg([
     { f: "jednotka", label: "Jednotka", fv: "select" }, { f: "vlastnik", label: "Vlastník", fv: "select" },
-    { f: "podil_na_jednotce", label: "Podíl na jednotce (např. 1/1, 1/2, SJM)", fv: "edit" }, { f: "od", label: "Vlastníkem od", fv: "editDay" },
+    { f: "podil_na_jednotce", label: "Podíl na jednotce (např. 1/1, 1/2, SJM)", fv: "edit" }, { f: "od", label: "Vlastníkem od", fv: "editDay", datum: true },
   ], { dest: "page:evidence_jednotek" }));
   await view("vlastnictvi_jednotky", "vlastnictvi", "List", ROLE.spravce, listCfg([
     colJ("vlastnik.jmeno", "Vlastník"), colF("podil_na_jednotce", "Podíl na jednotce"), colF("od", "Od", "format", { format: DEN }),
@@ -398,7 +444,7 @@ if (!(Number(row.pocet_schvaleni) >= 2)) return { error: "Fakturu musí schváli
   await view("muj_kontakt", "vlastnici", "Feed", ROLE.vlastnik, feedCfg("kontakt_karta", { md: 2 }), "Kontaktní údaje přihlášeného vlastníka");
   await view("faktura_nahrat", "faktury", "Edit", ROLE.vybor, editCfg([
     { f: "dodavatel", label: "Dodavatel", fv: "edit" }, { f: "cislo", label: "Číslo faktury / VS", fv: "edit" },
-    { f: "castka", label: "Částka (Kč)", fv: "edit" }, { f: "splatnost", label: "Splatnost", fv: "editDay" },
+    { f: "castka", label: "Částka (Kč)", fv: "edit" }, { f: "splatnost", label: "Splatnost", fv: "editDay", datum: true },
     { f: "popis", label: "Za co / poznámka", fv: "textarea" }, { f: "soubor", label: "PDF faktury", fv: "upload" },
   ], { dest: "page:faktury", saveLabel: "Nahrát ke schválení" }));
   await view("rozhodnuti_faktury", "schvaleni", "List", ROLE.vybor, listCfg([
@@ -463,6 +509,20 @@ return f.odeslano ? { notify: "E-mail s fakturou byl odeslán na " + nastaveni.e
     colF("datum_rozhodnuti", "Zamítnuto", "format", { format: DEN }), ...fakturyCols, colF("rozhodli", "Důvod"), colView("faktura_detail", "Detail"),
   ], { order: "datum_rozhodnuti", desc: true, filter: { stav: "Zamítnuto" } }), "Zamítnuté faktury");
 
+  // Příspěvky a události na web (výbor)
+  await view("web_prispevek_upravit", "web_prispevky", "Edit", ROLE.vybor, editCfg([
+    { f: "typ", label: "Druh", fv: "radio_group" }, { f: "nadpis", label: "Nadpis", fv: "edit" },
+    { f: "zacatek", label: "Datum události (jen u události)", fv: "editDay", datum: true }, { f: "cas", label: "Čas začátku, např. 18:00 (nepovinný)", fv: "edit" }, { f: "misto", label: "Místo konání (jen u události)", fv: "edit" },
+    { f: "perex", label: "Krátké shrnutí (zobrazí se v přehledu)", fv: "textarea" }, { f: "text", label: "Celý text", fv: "textarea" },
+    { f: "datum", label: "Datum zveřejnění (prázdné = dnes)", fv: "editDay", datum: true },
+    { f: "dulezite", label: "Důležité – zvýraznit", fv: "edit" }, { f: "koncept", label: "Koncept – zatím nezveřejňovat", fv: "edit" },
+  ], { dest: "page:prispevky_na_web", saveLabel: "Uložit" }));
+  await view("web_prispevky_seznam", "web_prispevky", "List", ROLE.vybor, listCfg([
+    colF("datum", "Zveřejněno", "format", { format: DEN }), colF("typ", "Druh"), colF("nadpis", "Nadpis"),
+    colF("zacatek", "Datum události", "format", { format: DEN }), colF("cas", "Čas"), colF("dulezite", "Důležité", "show"), colF("koncept", "Koncept", "show"),
+    colView("web_prispevek_upravit", "Upravit"), colDel(),
+  ], { order: "datum", desc: true, create: "web_prispevek_upravit", createLabel: "Nový příspěvek nebo událost" }), "Příspěvky a události pro veřejný web");
+
   // Nastavení schvalování (admin)
   await view("nastaveni_upravit", "nastaveni_portalu", "Edit", ROLE.admin, editCfg([
     { f: "email_faktury", label: "E-mail pro schválené faktury", fv: "edit" }, { f: "pocet_schvaleni", label: "Počet potřebných schválení (min. 2)", fv: "edit" },
@@ -493,6 +553,9 @@ return f.odeslano ? { notify: "E-mail s fakturou byl odeslán na " + nastaveni.e
   await stranka("zamitnute_faktury", "Zamítnuté faktury", ROLE.vybor, [viewEl("faktury_zamitnute", "f")]);
   await stranka("interni_dokumenty", "Interní dokumenty výboru", ROLE.vybor, [uvodText("Vidí je jen členové výboru."), viewEl("dokumenty_vyboru_seznam", "d")]);
   await stranka("sprava_oznameni", "Správa oznámení", ROLE.vybor, [uvodText("Oznámení vidí všichni přihlášení včetně nájemníků."), viewEl("oznameni_sprava", "o")]);
+  await stranka("prispevky_na_web", "Příspěvky a události na webu", ROLE.vybor, [
+    uvodText("Co tu zveřejníte, uvidí každý návštěvník veřejného webu SVJ – obvykle do minuty. Aktuality se ukážou na úvodní stránce webu, události v přehledu „Plánované události“ (po skončení samy zmizí). Koncept web nezobrazí, dokud v něm nezrušíte zaškrtnutí „Koncept“."),
+    viewEl("web_prispevky_seznam", "p")]);
   await stranka("nastaveni_schvalovani", "Nastavení schvalování faktur", ROLE.vybor, [uvodText("Kam se posílají schválené faktury a kolik schválení je potřeba. Měnit smí jen admin."), viewEl("nastaveni_seznam", "n")]);
 
   await Page.create({
@@ -505,7 +568,7 @@ return f.odeslano ? { notify: "E-mail s fakturou byl odeslán na " + nastaveni.e
         ] }], widths: [12] }], proRole(ROLE.vlastnik)),
       kontejner([{ besides: [{ above: [
         odkaz("/page/faktury", "Faktury ke schválení", "btn btn-primary me-2 mb-2"), odkaz("/view/faktura_nahrat", "Nahrát fakturu"),
-        odkaz("/page/interni_dokumenty", "Interní dokumenty"),
+        odkaz("/page/interni_dokumenty", "Interní dokumenty"), odkaz("/page/prispevky_na_web", "Příspěvky na web"),
       ] }], widths: [12] }], proRole(ROLE.vybor)),
       lbl("<h4 class=\"mt-4\">Oznámení</h4>"),
       viewEl("oznameni_prehled", "oznameni"),
@@ -540,6 +603,7 @@ return f.odeslano ? { notify: "E-mail s fakturou byl odeslán na " + nastaveni.e
       { label: "Zamítnuté faktury", type: "Page", pagename: "zamitnute_faktury", min_role: ROLE.vybor },
       { label: "Interní dokumenty", type: "Page", pagename: "interni_dokumenty", min_role: ROLE.vybor },
       { label: "Správa oznámení", type: "Page", pagename: "sprava_oznameni", min_role: ROLE.vybor },
+      { label: "Příspěvky na web", type: "Page", pagename: "prispevky_na_web", min_role: ROLE.vybor },
       { label: "Nastavení schvalování", type: "Page", pagename: "nastaveni_schvalovani", min_role: ROLE.vybor },
     ] },
     // Standardní položky Saltcornu (popisky Saltcorn sám přeloží do češtiny):

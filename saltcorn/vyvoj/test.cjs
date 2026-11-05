@@ -85,6 +85,8 @@ const lastMail = () => {
     faktura_nahrat: ["predseda"],
     faktury_schvalene: ["predseda"],
     nastaveni_seznam: ["predseda"],
+    web_prispevky_seznam: ["predseda"],
+    web_prispevek_upravit: ["predseda"],
   };
   const who = ["predseda", "spravce", "vlastnik1", "najemnik", "novy", "public"];
   for (const [v, allowed] of Object.entries(views)) {
@@ -311,6 +313,53 @@ const lastMail = () => {
   await pr.goto(BASE + `/view/faktura_detail?id=${f2.id}`);
   t = await text(pr);
   check("faktury", "u rozhodnuté faktury už není formulář", !t.includes("Odeslat rozhodnutí"));
+
+  // ---------- 6. Příspěvky a události pro veřejný web ----------
+  await pr.goto(BASE + "/view/web_prispevek_upravit");
+  await pr.check("input[name=typ][value=Aktualita]");
+  await pr.fill("input[name=nadpis]", "Odečty vodoměrů");
+  await pr.fill("[name=perex]", "Ve středu proběhnou odečty vodoměrů.");
+  await pr.fill("[name=text]", "Prosíme o zpřístupnění vodoměrů.\n\nVíce na https://example.cz");
+  await submit(pr, "Uložit");
+  check("web", "výbor uloží aktualitu", pr.url().includes("/page/prispevky_na_web") && (await text(pr)).includes("Odečty vodoměrů"), pr.url());
+  await pr.goto(BASE + "/view/web_prispevek_upravit");
+  await pr.check("input[name=typ][value=Událost]");
+  await pr.fill("input[name=nadpis]", "Shromáždění vlastníků");
+  await submit(pr, "Uložit");
+  check("web", "událost bez začátku se odmítne", (await text(pr)).includes("vyplňte začátek"));
+  // událost přes formulář: datum z kalendáře, čas zapsaný s tečkou se uloží jako 18:00
+  const zaTyden = new Date(Date.now() + 7 * 864e5).toISOString().slice(0, 10);
+  await pr.goto(BASE + "/view/web_prispevek_upravit");
+  await pr.check("input[name=typ][value=Událost]");
+  await pr.fill("input[name=nadpis]", "Shromáždění vlastníků");
+  await pr.fill("input[name=zacatek]", zaTyden);
+  await pr.fill("input[name=cas]", "18.00");
+  await pr.fill("input[name=misto]", "Společenská místnost");
+  await pr.fill("[name=perex]", "Výroční shromáždění.");
+  await submit(pr, "Uložit");
+  check("web", "výbor založí událost s datem a časem", pr.url().includes("/page/prispevky_na_web") && (await text(pr)).includes("Shromáždění vlastníků"), pr.url());
+  await pr.click('tr:has-text("Shromáždění vlastníků") >> text=Upravit');
+  check("web", "při úpravě se datum a čas předvyplní", (await pr.inputValue("input[name=zacatek]")) === zaTyden && (await pr.inputValue("input[name=cas]")) === "18:00" && !!(await pr.inputValue("input[name=datum]")),
+    `${await pr.inputValue("input[name=zacatek]")} ${await pr.inputValue("input[name=cas]")} ${await pr.inputValue("input[name=datum]")}`);
+  r = await api(S.predseda, "POST", "/api/web_prispevky", { typ: "Událost", nadpis: "Špatný čas", zacatek: zaTyden, cas: "25:99" });
+  check("web", "nesmyslný čas se odmítne", denied(r), JSON.stringify(r.body));
+  r = await api(S.predseda, "POST", "/api/web_prispevky", { typ: "Aktualita", nadpis: "Tajný koncept", koncept: true });
+  check("web", "výbor uloží koncept", !denied(r), JSON.stringify(r.body));
+  const pub = await S.public.page.request.get(BASE + "/api/action/verejne_prispevky", { headers: { Origin: "https://laadic.github.io" } });
+  const pj = await pub.json().catch(() => ({}));
+  const data = pj.data || [];
+  check("web", "veřejné API vrací zveřejněnou aktualitu i událost", pj.success && data.some((x) => x.nadpis === "Odečty vodoměrů" && x.datum) && data.some((x) => x.typ === "Událost" && String(x.zacatek).slice(0, 10) === zaTyden && x.cas === "18:00"), JSON.stringify(data.map((x) => [x.nadpis, x.zacatek, x.cas])));
+  check("web", "veřejné API nevrací koncept", !data.some((x) => x.nadpis === "Tajný koncept"));
+  check("web", "veřejné API nevrací interní pole", data.length > 0 && data.every((x) => !("koncept" in x)));
+  check("web", "CORS pro veřejný web", pub.headers()["access-control-allow-origin"] === "*", pub.headers()["access-control-allow-origin"]);
+  const rt = await S.public.page.request.get(BASE + "/api/web_prispevky");
+  check("web", "tabulka s koncepty není veřejná", rt.status() === 401, rt.status());
+  r = await api(S.vlastnik1, "GET", "/api/web_prispevky");
+  check("web", "vlastník nečte tabulku příspěvků", denied(r), r.status);
+  r = await api(S.vlastnik1, "POST", "/api/web_prispevky", { typ: "Aktualita", nadpis: "Podvržená zpráva" });
+  check("web", "vlastník nezaloží příspěvek", denied(r), JSON.stringify(r.body));
+  r = await api(S.spravce, "POST", "/api/web_prispevky", { typ: "Aktualita", nadpis: "Zpráva správce" });
+  check("web", "správce nezaloží příspěvek (jen výbor)", denied(r), JSON.stringify(r.body));
 
   console.log(`\nVÝSLEDEK: ${pass} OK, ${fail} FAIL`);
   await b.close();

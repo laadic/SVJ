@@ -21,10 +21,9 @@
           "expression": null,
           "type": "Date",
           "attributes": {
-            "default": "2026-11-04T22:49:48.314Z",
-            "default_expression": "new Date()"
+            "day_only": true
           },
-          "required": true,
+          "required": false,
           "primary_key": false,
           "refname": "",
           "description": null
@@ -95,7 +94,9 @@
           "stored": false,
           "expression": null,
           "type": "Date",
-          "attributes": {},
+          "attributes": {
+            "day_only": true
+          },
           "required": false,
           "primary_key": false,
           "refname": "",
@@ -201,7 +202,9 @@
           "stored": false,
           "expression": null,
           "type": "Date",
-          "attributes": {},
+          "attributes": {
+            "day_only": true
+          },
           "required": false,
           "primary_key": false,
           "refname": "",
@@ -576,6 +579,7 @@
           "expression": null,
           "type": "Date",
           "attributes": {
+            "day_only": true,
             "min_role_write": 30
           },
           "required": false,
@@ -833,7 +837,9 @@
           "stored": false,
           "expression": null,
           "type": "Date",
-          "attributes": {},
+          "attributes": {
+            "day_only": true
+          },
           "required": false,
           "primary_key": false,
           "refname": "",
@@ -1045,6 +1051,182 @@
       "ownership_field_name": null
     },
     {
+      "name": "web_prispevky",
+      "description": "Aktuality a události pro veřejný web; koncepty web nezobrazí",
+      "is_user_group": false,
+      "min_role_read": 20,
+      "min_role_write": 20,
+      "versioned": false,
+      "has_sync_info": false,
+      "provider_name": null,
+      "provider_cfg": null,
+      "ownership_formula": null,
+      "fields": [
+        {
+          "name": "cas",
+          "label": "Čas události",
+          "is_unique": false,
+          "calculated": false,
+          "stored": false,
+          "expression": null,
+          "type": "String",
+          "attributes": {},
+          "required": false,
+          "primary_key": false,
+          "refname": "",
+          "description": null
+        },
+        {
+          "name": "datum",
+          "label": "Datum zveřejnění",
+          "is_unique": false,
+          "calculated": false,
+          "stored": false,
+          "expression": null,
+          "type": "Date",
+          "attributes": {
+            "day_only": true
+          },
+          "required": false,
+          "primary_key": false,
+          "refname": "",
+          "description": null
+        },
+        {
+          "name": "dulezite",
+          "label": "Důležité (zvýraznit)",
+          "is_unique": false,
+          "calculated": false,
+          "stored": false,
+          "expression": null,
+          "type": "Bool",
+          "attributes": {},
+          "required": false,
+          "primary_key": false,
+          "refname": "",
+          "description": null
+        },
+        {
+          "name": "id",
+          "label": "ID",
+          "is_unique": true,
+          "calculated": false,
+          "stored": false,
+          "expression": null,
+          "type": "Integer",
+          "attributes": {},
+          "required": true,
+          "primary_key": true,
+          "refname": "",
+          "description": ""
+        },
+        {
+          "name": "koncept",
+          "label": "Koncept – zatím nezveřejňovat",
+          "is_unique": false,
+          "calculated": false,
+          "stored": false,
+          "expression": null,
+          "type": "Bool",
+          "attributes": {},
+          "required": false,
+          "primary_key": false,
+          "refname": "",
+          "description": null
+        },
+        {
+          "name": "misto",
+          "label": "Místo konání",
+          "is_unique": false,
+          "calculated": false,
+          "stored": false,
+          "expression": null,
+          "type": "String",
+          "attributes": {},
+          "required": false,
+          "primary_key": false,
+          "refname": "",
+          "description": null
+        },
+        {
+          "name": "nadpis",
+          "label": "Nadpis",
+          "is_unique": false,
+          "calculated": false,
+          "stored": false,
+          "expression": null,
+          "type": "String",
+          "attributes": {},
+          "required": true,
+          "primary_key": false,
+          "refname": "",
+          "description": null
+        },
+        {
+          "name": "perex",
+          "label": "Krátké shrnutí",
+          "is_unique": false,
+          "calculated": false,
+          "stored": false,
+          "expression": null,
+          "type": "String",
+          "attributes": {},
+          "required": false,
+          "primary_key": false,
+          "refname": "",
+          "description": null
+        },
+        {
+          "name": "text",
+          "label": "Text",
+          "is_unique": false,
+          "calculated": false,
+          "stored": false,
+          "expression": null,
+          "type": "String",
+          "attributes": {},
+          "required": false,
+          "primary_key": false,
+          "refname": "",
+          "description": null
+        },
+        {
+          "name": "typ",
+          "label": "Druh",
+          "is_unique": false,
+          "calculated": false,
+          "stored": false,
+          "expression": null,
+          "type": "String",
+          "attributes": {
+            "options": "Aktualita,Událost"
+          },
+          "required": true,
+          "primary_key": false,
+          "refname": "",
+          "description": null
+        },
+        {
+          "name": "zacatek",
+          "label": "Datum události",
+          "is_unique": false,
+          "calculated": false,
+          "stored": false,
+          "expression": null,
+          "type": "Date",
+          "attributes": {
+            "day_only": true
+          },
+          "required": false,
+          "primary_key": false,
+          "refname": "",
+          "description": null
+        }
+      ],
+      "constraints": [],
+      "ownership_field_name": null
+    },
+    {
       "name": "users",
       "fields": [
         {
@@ -1224,7 +1406,9 @@
                       "fieldview": "editDay",
                       "textStyle": "",
                       "field_name": "datum",
-                      "configuration": {}
+                      "configuration": {
+                        "date_picker": true
+                      }
                     }
                   ]
                 }
@@ -1327,7 +1511,9 @@
             "type": "Field",
             "fieldview": "editDay",
             "field_name": "datum",
-            "configuration": {}
+            "configuration": {
+              "date_picker": true
+            }
           },
           {
             "type": "Field",
@@ -1567,7 +1753,9 @@
                       "fieldview": "editDay",
                       "textStyle": "",
                       "field_name": "datum",
-                      "configuration": {}
+                      "configuration": {
+                        "date_picker": true
+                      }
                     }
                   ]
                 }
@@ -1724,7 +1912,9 @@
             "type": "Field",
             "fieldview": "editDay",
             "field_name": "datum",
-            "configuration": {}
+            "configuration": {
+              "date_picker": true
+            }
           },
           {
             "type": "Field",
@@ -2174,7 +2364,9 @@
                       "fieldview": "editDay",
                       "textStyle": "",
                       "field_name": "datum",
-                      "configuration": {}
+                      "configuration": {
+                        "date_picker": true
+                      }
                     }
                   ]
                 }
@@ -2325,7 +2517,9 @@
             "type": "Field",
             "fieldview": "editDay",
             "field_name": "datum",
-            "configuration": {}
+            "configuration": {
+              "date_picker": true
+            }
           },
           {
             "type": "Field",
@@ -3040,7 +3234,9 @@
                       "fieldview": "editDay",
                       "textStyle": "",
                       "field_name": "od",
-                      "configuration": {}
+                      "configuration": {
+                        "date_picker": true
+                      }
                     }
                   ]
                 }
@@ -3107,7 +3303,9 @@
             "type": "Field",
             "fieldview": "editDay",
             "field_name": "od",
-            "configuration": {}
+            "configuration": {
+              "date_picker": true
+            }
           }
         ],
         "auto_save": false,
@@ -5054,7 +5252,9 @@
                       "fieldview": "editDay",
                       "textStyle": "",
                       "field_name": "splatnost",
-                      "configuration": {}
+                      "configuration": {
+                        "date_picker": true
+                      }
                     }
                   ]
                 }
@@ -5217,7 +5417,9 @@
             "type": "Field",
             "fieldview": "editDay",
             "field_name": "splatnost",
-            "configuration": {}
+            "configuration": {
+              "date_picker": true
+            }
           },
           {
             "type": "Field",
@@ -6959,6 +7161,699 @@
       "exttable_name": null
     },
     {
+      "name": "web_prispevek_upravit",
+      "description": "",
+      "viewtemplate": "Edit",
+      "configuration": {
+        "fixed": {},
+        "layout": {
+          "above": [
+            {
+              "style": {
+                "margin-bottom": "1rem"
+              },
+              "aligns": [
+                "end",
+                "start"
+              ],
+              "widths": [
+                3,
+                9
+              ],
+              "besides": [
+                {
+                  "above": [
+                    null,
+                    {
+                      "type": "blank",
+                      "block": false,
+                      "contents": "Druh",
+                      "labelFor": "typ",
+                      "isFormula": {},
+                      "textStyle": "fw-bold"
+                    }
+                  ]
+                },
+                {
+                  "above": [
+                    null,
+                    {
+                      "type": "field",
+                      "block": false,
+                      "fieldview": "radio_group",
+                      "textStyle": "",
+                      "field_name": "typ",
+                      "configuration": {}
+                    }
+                  ]
+                }
+              ],
+              "breakpoints": [
+                "md",
+                "md"
+              ],
+              "mobileAligns": [
+                "start"
+              ]
+            },
+            {
+              "style": {
+                "margin-bottom": "1rem"
+              },
+              "aligns": [
+                "end",
+                "start"
+              ],
+              "widths": [
+                3,
+                9
+              ],
+              "besides": [
+                {
+                  "above": [
+                    null,
+                    {
+                      "type": "blank",
+                      "block": false,
+                      "contents": "Nadpis",
+                      "labelFor": "nadpis",
+                      "isFormula": {},
+                      "textStyle": "fw-bold"
+                    }
+                  ]
+                },
+                {
+                  "above": [
+                    null,
+                    {
+                      "type": "field",
+                      "block": false,
+                      "fieldview": "edit",
+                      "textStyle": "",
+                      "field_name": "nadpis",
+                      "configuration": {}
+                    }
+                  ]
+                }
+              ],
+              "breakpoints": [
+                "md",
+                "md"
+              ],
+              "mobileAligns": [
+                "start"
+              ]
+            },
+            {
+              "style": {
+                "margin-bottom": "1rem"
+              },
+              "aligns": [
+                "end",
+                "start"
+              ],
+              "widths": [
+                3,
+                9
+              ],
+              "besides": [
+                {
+                  "above": [
+                    null,
+                    {
+                      "type": "blank",
+                      "block": false,
+                      "contents": "Datum události (jen u události)",
+                      "labelFor": "zacatek",
+                      "isFormula": {},
+                      "textStyle": "fw-bold"
+                    }
+                  ]
+                },
+                {
+                  "above": [
+                    null,
+                    {
+                      "type": "field",
+                      "block": false,
+                      "fieldview": "editDay",
+                      "textStyle": "",
+                      "field_name": "zacatek",
+                      "configuration": {
+                        "date_picker": true
+                      }
+                    }
+                  ]
+                }
+              ],
+              "breakpoints": [
+                "md",
+                "md"
+              ],
+              "mobileAligns": [
+                "start"
+              ]
+            },
+            {
+              "style": {
+                "margin-bottom": "1rem"
+              },
+              "aligns": [
+                "end",
+                "start"
+              ],
+              "widths": [
+                3,
+                9
+              ],
+              "besides": [
+                {
+                  "above": [
+                    null,
+                    {
+                      "type": "blank",
+                      "block": false,
+                      "contents": "Čas začátku, např. 18:00 (nepovinný)",
+                      "labelFor": "cas",
+                      "isFormula": {},
+                      "textStyle": "fw-bold"
+                    }
+                  ]
+                },
+                {
+                  "above": [
+                    null,
+                    {
+                      "type": "field",
+                      "block": false,
+                      "fieldview": "edit",
+                      "textStyle": "",
+                      "field_name": "cas",
+                      "configuration": {}
+                    }
+                  ]
+                }
+              ],
+              "breakpoints": [
+                "md",
+                "md"
+              ],
+              "mobileAligns": [
+                "start"
+              ]
+            },
+            {
+              "style": {
+                "margin-bottom": "1rem"
+              },
+              "aligns": [
+                "end",
+                "start"
+              ],
+              "widths": [
+                3,
+                9
+              ],
+              "besides": [
+                {
+                  "above": [
+                    null,
+                    {
+                      "type": "blank",
+                      "block": false,
+                      "contents": "Místo konání (jen u události)",
+                      "labelFor": "misto",
+                      "isFormula": {},
+                      "textStyle": "fw-bold"
+                    }
+                  ]
+                },
+                {
+                  "above": [
+                    null,
+                    {
+                      "type": "field",
+                      "block": false,
+                      "fieldview": "edit",
+                      "textStyle": "",
+                      "field_name": "misto",
+                      "configuration": {}
+                    }
+                  ]
+                }
+              ],
+              "breakpoints": [
+                "md",
+                "md"
+              ],
+              "mobileAligns": [
+                "start"
+              ]
+            },
+            {
+              "style": {
+                "margin-bottom": "1rem"
+              },
+              "aligns": [
+                "end",
+                "start"
+              ],
+              "widths": [
+                3,
+                9
+              ],
+              "besides": [
+                {
+                  "above": [
+                    null,
+                    {
+                      "type": "blank",
+                      "block": false,
+                      "contents": "Krátké shrnutí (zobrazí se v přehledu)",
+                      "labelFor": "perex",
+                      "isFormula": {},
+                      "textStyle": "fw-bold"
+                    }
+                  ]
+                },
+                {
+                  "above": [
+                    null,
+                    {
+                      "type": "field",
+                      "block": false,
+                      "fieldview": "textarea",
+                      "textStyle": "",
+                      "field_name": "perex",
+                      "configuration": {}
+                    }
+                  ]
+                }
+              ],
+              "breakpoints": [
+                "md",
+                "md"
+              ],
+              "mobileAligns": [
+                "start"
+              ]
+            },
+            {
+              "style": {
+                "margin-bottom": "1rem"
+              },
+              "aligns": [
+                "end",
+                "start"
+              ],
+              "widths": [
+                3,
+                9
+              ],
+              "besides": [
+                {
+                  "above": [
+                    null,
+                    {
+                      "type": "blank",
+                      "block": false,
+                      "contents": "Celý text",
+                      "labelFor": "text",
+                      "isFormula": {},
+                      "textStyle": "fw-bold"
+                    }
+                  ]
+                },
+                {
+                  "above": [
+                    null,
+                    {
+                      "type": "field",
+                      "block": false,
+                      "fieldview": "textarea",
+                      "textStyle": "",
+                      "field_name": "text",
+                      "configuration": {}
+                    }
+                  ]
+                }
+              ],
+              "breakpoints": [
+                "md",
+                "md"
+              ],
+              "mobileAligns": [
+                "start"
+              ]
+            },
+            {
+              "style": {
+                "margin-bottom": "1rem"
+              },
+              "aligns": [
+                "end",
+                "start"
+              ],
+              "widths": [
+                3,
+                9
+              ],
+              "besides": [
+                {
+                  "above": [
+                    null,
+                    {
+                      "type": "blank",
+                      "block": false,
+                      "contents": "Datum zveřejnění (prázdné = dnes)",
+                      "labelFor": "datum",
+                      "isFormula": {},
+                      "textStyle": "fw-bold"
+                    }
+                  ]
+                },
+                {
+                  "above": [
+                    null,
+                    {
+                      "type": "field",
+                      "block": false,
+                      "fieldview": "editDay",
+                      "textStyle": "",
+                      "field_name": "datum",
+                      "configuration": {
+                        "date_picker": true
+                      }
+                    }
+                  ]
+                }
+              ],
+              "breakpoints": [
+                "md",
+                "md"
+              ],
+              "mobileAligns": [
+                "start"
+              ]
+            },
+            {
+              "style": {
+                "margin-bottom": "1rem"
+              },
+              "aligns": [
+                "end",
+                "start"
+              ],
+              "widths": [
+                3,
+                9
+              ],
+              "besides": [
+                {
+                  "above": [
+                    null,
+                    {
+                      "type": "blank",
+                      "block": false,
+                      "contents": "Důležité – zvýraznit",
+                      "labelFor": "dulezite",
+                      "isFormula": {},
+                      "textStyle": "fw-bold"
+                    }
+                  ]
+                },
+                {
+                  "above": [
+                    null,
+                    {
+                      "type": "field",
+                      "block": false,
+                      "fieldview": "edit",
+                      "textStyle": "",
+                      "field_name": "dulezite",
+                      "configuration": {}
+                    }
+                  ]
+                }
+              ],
+              "breakpoints": [
+                "md",
+                "md"
+              ],
+              "mobileAligns": [
+                "start"
+              ]
+            },
+            {
+              "style": {
+                "margin-bottom": "1rem"
+              },
+              "aligns": [
+                "end",
+                "start"
+              ],
+              "widths": [
+                3,
+                9
+              ],
+              "besides": [
+                {
+                  "above": [
+                    null,
+                    {
+                      "type": "blank",
+                      "block": false,
+                      "contents": "Koncept – zatím nezveřejňovat",
+                      "labelFor": "koncept",
+                      "isFormula": {},
+                      "textStyle": "fw-bold"
+                    }
+                  ]
+                },
+                {
+                  "above": [
+                    null,
+                    {
+                      "type": "field",
+                      "block": false,
+                      "fieldview": "edit",
+                      "textStyle": "",
+                      "field_name": "koncept",
+                      "configuration": {}
+                    }
+                  ]
+                }
+              ],
+              "breakpoints": [
+                "md",
+                "md"
+              ],
+              "mobileAligns": [
+                "start"
+              ]
+            },
+            {
+              "style": {
+                "margin-bottom": "1rem"
+              },
+              "aligns": [
+                "end",
+                "start"
+              ],
+              "widths": [
+                3,
+                9
+              ],
+              "besides": [
+                null,
+                {
+                  "type": "action",
+                  "block": false,
+                  "minRole": 100,
+                  "action_name": "Save",
+                  "action_label": "Uložit",
+                  "action_style": "btn-primary",
+                  "configuration": {}
+                }
+              ],
+              "breakpoints": [
+                "md",
+                "md"
+              ]
+            }
+          ]
+        },
+        "columns": [
+          {
+            "type": "Field",
+            "fieldview": "radio_group",
+            "field_name": "typ",
+            "configuration": {}
+          },
+          {
+            "type": "Field",
+            "fieldview": "edit",
+            "field_name": "nadpis",
+            "configuration": {}
+          },
+          {
+            "type": "Field",
+            "fieldview": "editDay",
+            "field_name": "zacatek",
+            "configuration": {
+              "date_picker": true
+            }
+          },
+          {
+            "type": "Field",
+            "fieldview": "edit",
+            "field_name": "cas",
+            "configuration": {}
+          },
+          {
+            "type": "Field",
+            "fieldview": "edit",
+            "field_name": "misto",
+            "configuration": {}
+          },
+          {
+            "type": "Field",
+            "fieldview": "textarea",
+            "field_name": "perex",
+            "configuration": {}
+          },
+          {
+            "type": "Field",
+            "fieldview": "textarea",
+            "field_name": "text",
+            "configuration": {}
+          },
+          {
+            "type": "Field",
+            "fieldview": "editDay",
+            "field_name": "datum",
+            "configuration": {
+              "date_picker": true
+            }
+          },
+          {
+            "type": "Field",
+            "fieldview": "edit",
+            "field_name": "dulezite",
+            "configuration": {}
+          },
+          {
+            "type": "Field",
+            "fieldview": "edit",
+            "field_name": "koncept",
+            "configuration": {}
+          }
+        ],
+        "auto_save": false,
+        "split_paste": false,
+        "page_when_done": "prispevky_na_web",
+        "destination_type": "Page"
+      },
+      "min_role": 20,
+      "table": "web_prispevky",
+      "slug": null,
+      "attributes": null,
+      "default_render_page": null,
+      "exttable_name": null
+    },
+    {
+      "name": "web_prispevky_seznam",
+      "description": "Příspěvky a události pro veřejný web",
+      "viewtemplate": "List",
+      "configuration": {
+        "columns": [
+          {
+            "type": "Field",
+            "format": "D. M. YYYY",
+            "fieldview": "format",
+            "field_name": "datum",
+            "header_label": "Zveřejněno",
+            "configuration": {}
+          },
+          {
+            "type": "Field",
+            "fieldview": "as_text",
+            "field_name": "typ",
+            "header_label": "Druh",
+            "configuration": {}
+          },
+          {
+            "type": "Field",
+            "fieldview": "as_text",
+            "field_name": "nadpis",
+            "header_label": "Nadpis",
+            "configuration": {}
+          },
+          {
+            "type": "Field",
+            "format": "D. M. YYYY",
+            "fieldview": "format",
+            "field_name": "zacatek",
+            "header_label": "Datum události",
+            "configuration": {}
+          },
+          {
+            "type": "Field",
+            "fieldview": "as_text",
+            "field_name": "cas",
+            "header_label": "Čas",
+            "configuration": {}
+          },
+          {
+            "type": "Field",
+            "fieldview": "show",
+            "field_name": "dulezite",
+            "header_label": "Důležité",
+            "configuration": {}
+          },
+          {
+            "type": "Field",
+            "fieldview": "show",
+            "field_name": "koncept",
+            "header_label": "Koncept",
+            "configuration": {}
+          },
+          {
+            "type": "ViewLink",
+            "view": "Own:web_prispevek_upravit",
+            "link_style": "btn btn-sm btn-outline-primary",
+            "view_label": "Upravit",
+            "header_label": " "
+          },
+          {
+            "type": "Action",
+            "confirm": true,
+            "action_name": "Delete",
+            "action_size": "btn-sm",
+            "action_label": "Smazat",
+            "action_style": "btn-outline-danger",
+            "header_label": " "
+          }
+        ],
+        "default_state": {
+          "_descending": true,
+          "_order_field": "datum",
+          "_rows_per_page": 50
+        },
+        "view_to_create": "web_prispevek_upravit",
+        "create_link_style": "btn btn-primary",
+        "create_view_label": "Nový příspěvek nebo událost",
+        "create_view_display": "Link",
+        "create_view_location": "Top left"
+      },
+      "min_role": 20,
+      "table": "web_prispevky",
+      "slug": null,
+      "attributes": null,
+      "default_render_page": null,
+      "exttable_name": null
+    },
+    {
       "name": "nastaveni_upravit",
       "description": "",
       "viewtemplate": "Edit",
@@ -7505,6 +8400,40 @@
       "root_page_for_roles": []
     },
     {
+      "name": "prispevky_na_web",
+      "title": "Příspěvky a události na webu",
+      "description": "Příspěvky a události na webu",
+      "min_role": 20,
+      "layout": {
+        "above": [
+          {
+            "type": "blank",
+            "block": false,
+            "contents": "<h2 class=\"mb-3\">Příspěvky a události na webu</h2>",
+            "isFormula": {},
+            "textStyle": ""
+          },
+          {
+            "type": "blank",
+            "block": false,
+            "contents": "<p class=\"text-muted\">Co tu zveřejníte, uvidí každý návštěvník veřejného webu SVJ – obvykle do minuty. Aktuality se ukážou na úvodní stránce webu, události v přehledu „Plánované události“ (po skončení samy zmizí). Koncept web nezobrazí, dokud v něm nezrušíte zaškrtnutí „Koncept“.</p>",
+            "isFormula": {},
+            "textStyle": ""
+          },
+          {
+            "name": "p",
+            "type": "view",
+            "view": "web_prispevky_seznam",
+            "state": "shared",
+            "configuration": {}
+          }
+        ]
+      },
+      "fixed_states": {},
+      "attributes": null,
+      "root_page_for_roles": []
+    },
+    {
       "name": "nastaveni_schvalovani",
       "title": "Nastavení schvalování faktur",
       "description": "Nastavení schvalování faktur",
@@ -7628,6 +8557,13 @@
                         {
                           "url": "/page/interni_dokumenty",
                           "text": "Interní dokumenty",
+                          "type": "link",
+                          "block": false,
+                          "link_style": "btn btn-outline-primary me-2 mb-2"
+                        },
+                        {
+                          "url": "/page/prispevky_na_web",
+                          "text": "Příspěvky na web",
                           "type": "link",
                           "block": false,
                           "link_style": "btn btn-outline-primary me-2 mb-2"
@@ -7864,12 +8800,50 @@
       "min_role": 100
     },
     {
+      "name": "web_prispevky_kontrola",
+      "description": "Doplní datum zveřejnění, u události vyžaduje datum a kontroluje formát času.",
+      "action": "run_js_code",
+      "when_trigger": "Validate",
+      "configuration": {
+        "code": "// Datum zveřejnění se doplní samo, událost musí mít datum, čas se sjednotí na tvar 18:00.\nconst doplnit = {};\nif (!row.datum) doplnit.datum = new Date();\nif (row.typ === \"Událost\" && !row.zacatek) return { error: \"U události vyplňte začátek – datum události.\" };\nif (row.cas !== undefined && row.cas !== null && String(row.cas).trim() !== \"\") {\n  const m = String(row.cas).trim().match(/^(\\d{1,2})(?:[:.](\\d{2}))?(?:\\s*h(?:od)?\\.?)?$/i);\n  if (!m || +m[1] > 23 || +(m[2] || 0) > 59) return { error: \"Čas zadejte například jako 18:00.\" };\n  const cas = String(+m[1]).padStart(2, \"0\") + \":\" + (m[2] || \"00\");\n  if (cas !== row.cas) doplnit.cas = cas;\n}\nif (Object.keys(doplnit).length) return { set_fields: doplnit };\n",
+        "run_where": "Server"
+      },
+      "table_name": "web_prispevky",
+      "channel": null,
+      "min_role": 100
+    },
+    {
+      "name": "oznameni_kontrola",
+      "description": "Oznámení bez data dostane dnešní datum.",
+      "action": "run_js_code",
+      "when_trigger": "Validate",
+      "configuration": {
+        "code": "if (!row.datum) return { set_fields: { datum: new Date() } };\n",
+        "run_where": "Server"
+      },
+      "table_name": "oznameni",
+      "channel": null,
+      "min_role": 100
+    },
+    {
+      "name": "verejne_prispevky",
+      "description": "Veřejný seznam zveřejněných příspěvků a událostí pro web (volá ho web SVJ).",
+      "action": "run_js_code",
+      "when_trigger": "API call",
+      "configuration": {
+        "code": "// Veřejný seznam pro web SVJ: jen zveřejněné příspěvky (bez konceptů) a jen veřejné údaje.\n// Adresa: /api/action/verejne_prispevky\nconst T = Table.findOne({ name: \"web_prispevky\" });\nconst radky = await T.getRows({}, { orderBy: \"datum\", orderDesc: true, limit: 300 });\nreturn radky.filter((r) => !r.koncept).map((r) => ({\n  id: r.id, typ: r.typ, nadpis: r.nadpis, perex: r.perex || \"\", text: r.text || \"\",\n  datum: r.datum, zacatek: r.zacatek || null, cas: r.cas || \"\", misto: r.misto || \"\", dulezite: !!r.dulezite,\n}));\n",
+        "run_where": "Server"
+      },
+      "channel": null,
+      "min_role": 100
+    },
+    {
       "name": "pocatecni_nastaveni",
       "description": "Jednorázově nastaví menu, domovské stránky rolí, zakáže registraci, vyžádá dvoufaktorové ověřování pro admina, výbor a správce, nastaví češtinu.",
       "action": "run_js_code",
       "when_trigger": "Never",
       "configuration": {
-        "code": "// Spusťte jednou po importu (Nastavení → Události → Triggery → pocatecni_nastaveni → Testovací běh).\n// Lze spustit i opakovaně – menu a nastavení se jen přepíší na výchozí stav klientské sekce.\nawait setConfig(\"menu_items\", [{\"label\":\"Úvod\",\"type\":\"Page\",\"pagename\":\"uvod\",\"min_role\":70},{\"label\":\"Dokumenty SVJ\",\"type\":\"Page\",\"pagename\":\"dokumenty_svj\",\"min_role\":60},{\"label\":\"Moje jednotka\",\"type\":\"Page\",\"pagename\":\"moje_jednotka\",\"min_role\":60},{\"label\":\"Evidence\",\"type\":\"Header\",\"min_role\":30,\"subitems\":[{\"label\":\"Jednotky\",\"type\":\"Page\",\"pagename\":\"evidence_jednotek\",\"min_role\":30},{\"label\":\"Vlastníci\",\"type\":\"Page\",\"pagename\":\"evidence_vlastniku\",\"min_role\":30},{\"label\":\"Správa dokumentů SVJ\",\"type\":\"Page\",\"pagename\":\"sprava_dokumentu\",\"min_role\":30}]},{\"label\":\"Výbor\",\"type\":\"Header\",\"min_role\":20,\"subitems\":[{\"label\":\"Faktury ke schválení\",\"type\":\"Page\",\"pagename\":\"faktury\",\"min_role\":20},{\"label\":\"Nahrát fakturu\",\"type\":\"View\",\"viewname\":\"faktura_nahrat\",\"min_role\":20},{\"label\":\"Schválené faktury\",\"type\":\"Page\",\"pagename\":\"schvalene_faktury\",\"min_role\":20},{\"label\":\"Zamítnuté faktury\",\"type\":\"Page\",\"pagename\":\"zamitnute_faktury\",\"min_role\":20},{\"label\":\"Interní dokumenty\",\"type\":\"Page\",\"pagename\":\"interni_dokumenty\",\"min_role\":20},{\"label\":\"Správa oznámení\",\"type\":\"Page\",\"pagename\":\"sprava_oznameni\",\"min_role\":20},{\"label\":\"Nastavení schvalování\",\"type\":\"Page\",\"pagename\":\"nastaveni_schvalovani\",\"min_role\":20}]},{\"label\":\"Settings\",\"type\":\"Header\",\"icon\":\"fas fa-wrench\",\"min_role\":\"1\",\"max_role\":\"1\",\"location\":\"Standard\",\"subitems\":[{\"label\":\"Users and security\",\"type\":\"Admin Page\",\"admin_page\":\"Users and security\",\"icon\":\"fas fa-users-cog\",\"min_role\":\"1\",\"max_role\":\"1\",\"location\":\"Standard\"},{\"label\":\"About application\",\"type\":\"Admin Page\",\"admin_page\":\"About application\",\"icon\":\"fas fa-info\",\"min_role\":\"1\",\"max_role\":\"1\",\"location\":\"Standard\"},{\"label\":\"Tables\",\"type\":\"Admin Page\",\"admin_page\":\"Tables\",\"icon\":\"fas fa-table\",\"min_role\":\"1\",\"max_role\":\"1\",\"location\":\"Standard\"},{\"label\":\"Views\",\"type\":\"Admin Page\",\"admin_page\":\"Views\",\"icon\":\"far fa-eye\",\"min_role\":\"1\",\"max_role\":\"1\",\"location\":\"Standard\"},{\"label\":\"Pages\",\"type\":\"Admin Page\",\"admin_page\":\"Pages\",\"icon\":\"far fa-file\",\"min_role\":\"1\",\"max_role\":\"1\",\"location\":\"Standard\"},{\"label\":\"Events\",\"type\":\"Admin Page\",\"admin_page\":\"Events\",\"icon\":\"fas fa-calendar-check\",\"min_role\":\"1\",\"max_role\":\"1\",\"location\":\"Standard\"},{\"label\":\"Files\",\"type\":\"Admin Page\",\"admin_page\":\"Files\",\"icon\":\"far fa-images\",\"min_role\":\"1\",\"max_role\":\"1\",\"location\":\"Standard\"},{\"label\":\"Site structure\",\"type\":\"Admin Page\",\"admin_page\":\"Site structure\",\"icon\":\"fas fa-compass\",\"min_role\":\"1\",\"max_role\":\"1\",\"location\":\"Standard\"},{\"label\":\"Modules\",\"type\":\"Admin Page\",\"admin_page\":\"Modules\",\"icon\":\"fas fa-cubes\",\"min_role\":\"1\",\"max_role\":\"1\",\"location\":\"Standard\"}]},{\"label\":\"User\",\"type\":\"Header\",\"icon\":\"far fa-user\",\"min_role\":\"80\",\"max_role\":\"1\",\"location\":\"Standard\",\"user_menu_header\":true,\"subitems\":[{\"label\":\"User settings\",\"type\":\"User Page\",\"user_page\":\"User settings\",\"icon\":\"fas fa-user-cog\",\"min_role\":\"80\",\"max_role\":\"1\",\"location\":\"Standard\"},{\"label\":\"Logout\",\"type\":\"User Page\",\"user_page\":\"Logout\",\"icon\":\"fas fa-sign-out-alt\",\"min_role\":\"80\",\"max_role\":\"1\",\"location\":\"Standard\"}]},{\"label\":\"Login\",\"type\":\"User Page\",\"user_page\":\"Login\",\"icon\":\"fas fa-sign-in-alt\",\"min_role\":\"100\",\"max_role\":\"100\",\"location\":\"Standard\"}]);\nawait setConfig(\"unrolled_menu_items\", [{\"label\":\"Úvod\",\"type\":\"Page\",\"pagename\":\"uvod\",\"min_role\":70},{\"label\":\"Dokumenty SVJ\",\"type\":\"Page\",\"pagename\":\"dokumenty_svj\",\"min_role\":60},{\"label\":\"Moje jednotka\",\"type\":\"Page\",\"pagename\":\"moje_jednotka\",\"min_role\":60},{\"label\":\"Evidence\",\"type\":\"Header\",\"min_role\":30,\"subitems\":[{\"label\":\"Jednotky\",\"type\":\"Page\",\"pagename\":\"evidence_jednotek\",\"min_role\":30},{\"label\":\"Vlastníci\",\"type\":\"Page\",\"pagename\":\"evidence_vlastniku\",\"min_role\":30},{\"label\":\"Správa dokumentů SVJ\",\"type\":\"Page\",\"pagename\":\"sprava_dokumentu\",\"min_role\":30}]},{\"label\":\"Výbor\",\"type\":\"Header\",\"min_role\":20,\"subitems\":[{\"label\":\"Faktury ke schválení\",\"type\":\"Page\",\"pagename\":\"faktury\",\"min_role\":20},{\"label\":\"Nahrát fakturu\",\"type\":\"View\",\"viewname\":\"faktura_nahrat\",\"min_role\":20},{\"label\":\"Schválené faktury\",\"type\":\"Page\",\"pagename\":\"schvalene_faktury\",\"min_role\":20},{\"label\":\"Zamítnuté faktury\",\"type\":\"Page\",\"pagename\":\"zamitnute_faktury\",\"min_role\":20},{\"label\":\"Interní dokumenty\",\"type\":\"Page\",\"pagename\":\"interni_dokumenty\",\"min_role\":20},{\"label\":\"Správa oznámení\",\"type\":\"Page\",\"pagename\":\"sprava_oznameni\",\"min_role\":20},{\"label\":\"Nastavení schvalování\",\"type\":\"Page\",\"pagename\":\"nastaveni_schvalovani\",\"min_role\":20}]},{\"label\":\"Settings\",\"type\":\"Header\",\"icon\":\"fas fa-wrench\",\"min_role\":\"1\",\"max_role\":\"1\",\"location\":\"Standard\",\"subitems\":[{\"label\":\"Users and security\",\"type\":\"Admin Page\",\"admin_page\":\"Users and security\",\"icon\":\"fas fa-users-cog\",\"min_role\":\"1\",\"max_role\":\"1\",\"location\":\"Standard\"},{\"label\":\"About application\",\"type\":\"Admin Page\",\"admin_page\":\"About application\",\"icon\":\"fas fa-info\",\"min_role\":\"1\",\"max_role\":\"1\",\"location\":\"Standard\"},{\"label\":\"Tables\",\"type\":\"Admin Page\",\"admin_page\":\"Tables\",\"icon\":\"fas fa-table\",\"min_role\":\"1\",\"max_role\":\"1\",\"location\":\"Standard\"},{\"label\":\"Views\",\"type\":\"Admin Page\",\"admin_page\":\"Views\",\"icon\":\"far fa-eye\",\"min_role\":\"1\",\"max_role\":\"1\",\"location\":\"Standard\"},{\"label\":\"Pages\",\"type\":\"Admin Page\",\"admin_page\":\"Pages\",\"icon\":\"far fa-file\",\"min_role\":\"1\",\"max_role\":\"1\",\"location\":\"Standard\"},{\"label\":\"Events\",\"type\":\"Admin Page\",\"admin_page\":\"Events\",\"icon\":\"fas fa-calendar-check\",\"min_role\":\"1\",\"max_role\":\"1\",\"location\":\"Standard\"},{\"label\":\"Files\",\"type\":\"Admin Page\",\"admin_page\":\"Files\",\"icon\":\"far fa-images\",\"min_role\":\"1\",\"max_role\":\"1\",\"location\":\"Standard\"},{\"label\":\"Site structure\",\"type\":\"Admin Page\",\"admin_page\":\"Site structure\",\"icon\":\"fas fa-compass\",\"min_role\":\"1\",\"max_role\":\"1\",\"location\":\"Standard\"},{\"label\":\"Modules\",\"type\":\"Admin Page\",\"admin_page\":\"Modules\",\"icon\":\"fas fa-cubes\",\"min_role\":\"1\",\"max_role\":\"1\",\"location\":\"Standard\"}]},{\"label\":\"User\",\"type\":\"Header\",\"icon\":\"far fa-user\",\"min_role\":\"80\",\"max_role\":\"1\",\"location\":\"Standard\",\"user_menu_header\":true,\"subitems\":[{\"label\":\"User settings\",\"type\":\"User Page\",\"user_page\":\"User settings\",\"icon\":\"fas fa-user-cog\",\"min_role\":\"80\",\"max_role\":\"1\",\"location\":\"Standard\"},{\"label\":\"Logout\",\"type\":\"User Page\",\"user_page\":\"Logout\",\"icon\":\"fas fa-sign-out-alt\",\"min_role\":\"80\",\"max_role\":\"1\",\"location\":\"Standard\"}]},{\"label\":\"Login\",\"type\":\"User Page\",\"user_page\":\"Login\",\"icon\":\"fas fa-sign-in-alt\",\"min_role\":\"100\",\"max_role\":\"100\",\"location\":\"Standard\"}]);\nawait setConfig(\"home_page_by_role\", { \"1\": \"uvod\", \"20\": \"uvod\", \"30\": \"uvod\", \"40\": \"uvod\", \"60\": \"uvod\", \"70\": \"uvod\", \"80\": \"bez_pristupu\", \"100\": \"vitejte\" });\nawait setConfig(\"allow_signup\", false);            // účty jen na pozvánku\nawait setConfig(\"twofa_policy_by_role\", { \"1\": \"Mandatory\", \"20\": \"Mandatory\", \"30\": \"Mandatory\", \"60\": \"Optional\", \"70\": \"Optional\" });\nawait setConfig(\"default_locale\", \"cs\");\nawait setConfig(\"site_name\", \"Klientská sekce SVJ\");\nawait refreshSystemCache();\nreturn { notify: \"Hotovo: menu, domovské stránky, zákaz registrace, 2FA a čeština nastaveny.\" };\n",
+        "code": "// Spusťte jednou po importu (Nastavení → Události → Triggery → pocatecni_nastaveni → Testovací běh).\n// Lze spustit i opakovaně – menu a nastavení se jen přepíší na výchozí stav klientské sekce.\nawait setConfig(\"menu_items\", [{\"label\":\"Úvod\",\"type\":\"Page\",\"pagename\":\"uvod\",\"min_role\":70},{\"label\":\"Dokumenty SVJ\",\"type\":\"Page\",\"pagename\":\"dokumenty_svj\",\"min_role\":60},{\"label\":\"Moje jednotka\",\"type\":\"Page\",\"pagename\":\"moje_jednotka\",\"min_role\":60},{\"label\":\"Evidence\",\"type\":\"Header\",\"min_role\":30,\"subitems\":[{\"label\":\"Jednotky\",\"type\":\"Page\",\"pagename\":\"evidence_jednotek\",\"min_role\":30},{\"label\":\"Vlastníci\",\"type\":\"Page\",\"pagename\":\"evidence_vlastniku\",\"min_role\":30},{\"label\":\"Správa dokumentů SVJ\",\"type\":\"Page\",\"pagename\":\"sprava_dokumentu\",\"min_role\":30}]},{\"label\":\"Výbor\",\"type\":\"Header\",\"min_role\":20,\"subitems\":[{\"label\":\"Faktury ke schválení\",\"type\":\"Page\",\"pagename\":\"faktury\",\"min_role\":20},{\"label\":\"Nahrát fakturu\",\"type\":\"View\",\"viewname\":\"faktura_nahrat\",\"min_role\":20},{\"label\":\"Schválené faktury\",\"type\":\"Page\",\"pagename\":\"schvalene_faktury\",\"min_role\":20},{\"label\":\"Zamítnuté faktury\",\"type\":\"Page\",\"pagename\":\"zamitnute_faktury\",\"min_role\":20},{\"label\":\"Interní dokumenty\",\"type\":\"Page\",\"pagename\":\"interni_dokumenty\",\"min_role\":20},{\"label\":\"Správa oznámení\",\"type\":\"Page\",\"pagename\":\"sprava_oznameni\",\"min_role\":20},{\"label\":\"Příspěvky na web\",\"type\":\"Page\",\"pagename\":\"prispevky_na_web\",\"min_role\":20},{\"label\":\"Nastavení schvalování\",\"type\":\"Page\",\"pagename\":\"nastaveni_schvalovani\",\"min_role\":20}]},{\"label\":\"Settings\",\"type\":\"Header\",\"icon\":\"fas fa-wrench\",\"min_role\":\"1\",\"max_role\":\"1\",\"location\":\"Standard\",\"subitems\":[{\"label\":\"Users and security\",\"type\":\"Admin Page\",\"admin_page\":\"Users and security\",\"icon\":\"fas fa-users-cog\",\"min_role\":\"1\",\"max_role\":\"1\",\"location\":\"Standard\"},{\"label\":\"About application\",\"type\":\"Admin Page\",\"admin_page\":\"About application\",\"icon\":\"fas fa-info\",\"min_role\":\"1\",\"max_role\":\"1\",\"location\":\"Standard\"},{\"label\":\"Tables\",\"type\":\"Admin Page\",\"admin_page\":\"Tables\",\"icon\":\"fas fa-table\",\"min_role\":\"1\",\"max_role\":\"1\",\"location\":\"Standard\"},{\"label\":\"Views\",\"type\":\"Admin Page\",\"admin_page\":\"Views\",\"icon\":\"far fa-eye\",\"min_role\":\"1\",\"max_role\":\"1\",\"location\":\"Standard\"},{\"label\":\"Pages\",\"type\":\"Admin Page\",\"admin_page\":\"Pages\",\"icon\":\"far fa-file\",\"min_role\":\"1\",\"max_role\":\"1\",\"location\":\"Standard\"},{\"label\":\"Events\",\"type\":\"Admin Page\",\"admin_page\":\"Events\",\"icon\":\"fas fa-calendar-check\",\"min_role\":\"1\",\"max_role\":\"1\",\"location\":\"Standard\"},{\"label\":\"Files\",\"type\":\"Admin Page\",\"admin_page\":\"Files\",\"icon\":\"far fa-images\",\"min_role\":\"1\",\"max_role\":\"1\",\"location\":\"Standard\"},{\"label\":\"Site structure\",\"type\":\"Admin Page\",\"admin_page\":\"Site structure\",\"icon\":\"fas fa-compass\",\"min_role\":\"1\",\"max_role\":\"1\",\"location\":\"Standard\"},{\"label\":\"Modules\",\"type\":\"Admin Page\",\"admin_page\":\"Modules\",\"icon\":\"fas fa-cubes\",\"min_role\":\"1\",\"max_role\":\"1\",\"location\":\"Standard\"}]},{\"label\":\"User\",\"type\":\"Header\",\"icon\":\"far fa-user\",\"min_role\":\"80\",\"max_role\":\"1\",\"location\":\"Standard\",\"user_menu_header\":true,\"subitems\":[{\"label\":\"User settings\",\"type\":\"User Page\",\"user_page\":\"User settings\",\"icon\":\"fas fa-user-cog\",\"min_role\":\"80\",\"max_role\":\"1\",\"location\":\"Standard\"},{\"label\":\"Logout\",\"type\":\"User Page\",\"user_page\":\"Logout\",\"icon\":\"fas fa-sign-out-alt\",\"min_role\":\"80\",\"max_role\":\"1\",\"location\":\"Standard\"}]},{\"label\":\"Login\",\"type\":\"User Page\",\"user_page\":\"Login\",\"icon\":\"fas fa-sign-in-alt\",\"min_role\":\"100\",\"max_role\":\"100\",\"location\":\"Standard\"}]);\nawait setConfig(\"unrolled_menu_items\", [{\"label\":\"Úvod\",\"type\":\"Page\",\"pagename\":\"uvod\",\"min_role\":70},{\"label\":\"Dokumenty SVJ\",\"type\":\"Page\",\"pagename\":\"dokumenty_svj\",\"min_role\":60},{\"label\":\"Moje jednotka\",\"type\":\"Page\",\"pagename\":\"moje_jednotka\",\"min_role\":60},{\"label\":\"Evidence\",\"type\":\"Header\",\"min_role\":30,\"subitems\":[{\"label\":\"Jednotky\",\"type\":\"Page\",\"pagename\":\"evidence_jednotek\",\"min_role\":30},{\"label\":\"Vlastníci\",\"type\":\"Page\",\"pagename\":\"evidence_vlastniku\",\"min_role\":30},{\"label\":\"Správa dokumentů SVJ\",\"type\":\"Page\",\"pagename\":\"sprava_dokumentu\",\"min_role\":30}]},{\"label\":\"Výbor\",\"type\":\"Header\",\"min_role\":20,\"subitems\":[{\"label\":\"Faktury ke schválení\",\"type\":\"Page\",\"pagename\":\"faktury\",\"min_role\":20},{\"label\":\"Nahrát fakturu\",\"type\":\"View\",\"viewname\":\"faktura_nahrat\",\"min_role\":20},{\"label\":\"Schválené faktury\",\"type\":\"Page\",\"pagename\":\"schvalene_faktury\",\"min_role\":20},{\"label\":\"Zamítnuté faktury\",\"type\":\"Page\",\"pagename\":\"zamitnute_faktury\",\"min_role\":20},{\"label\":\"Interní dokumenty\",\"type\":\"Page\",\"pagename\":\"interni_dokumenty\",\"min_role\":20},{\"label\":\"Správa oznámení\",\"type\":\"Page\",\"pagename\":\"sprava_oznameni\",\"min_role\":20},{\"label\":\"Příspěvky na web\",\"type\":\"Page\",\"pagename\":\"prispevky_na_web\",\"min_role\":20},{\"label\":\"Nastavení schvalování\",\"type\":\"Page\",\"pagename\":\"nastaveni_schvalovani\",\"min_role\":20}]},{\"label\":\"Settings\",\"type\":\"Header\",\"icon\":\"fas fa-wrench\",\"min_role\":\"1\",\"max_role\":\"1\",\"location\":\"Standard\",\"subitems\":[{\"label\":\"Users and security\",\"type\":\"Admin Page\",\"admin_page\":\"Users and security\",\"icon\":\"fas fa-users-cog\",\"min_role\":\"1\",\"max_role\":\"1\",\"location\":\"Standard\"},{\"label\":\"About application\",\"type\":\"Admin Page\",\"admin_page\":\"About application\",\"icon\":\"fas fa-info\",\"min_role\":\"1\",\"max_role\":\"1\",\"location\":\"Standard\"},{\"label\":\"Tables\",\"type\":\"Admin Page\",\"admin_page\":\"Tables\",\"icon\":\"fas fa-table\",\"min_role\":\"1\",\"max_role\":\"1\",\"location\":\"Standard\"},{\"label\":\"Views\",\"type\":\"Admin Page\",\"admin_page\":\"Views\",\"icon\":\"far fa-eye\",\"min_role\":\"1\",\"max_role\":\"1\",\"location\":\"Standard\"},{\"label\":\"Pages\",\"type\":\"Admin Page\",\"admin_page\":\"Pages\",\"icon\":\"far fa-file\",\"min_role\":\"1\",\"max_role\":\"1\",\"location\":\"Standard\"},{\"label\":\"Events\",\"type\":\"Admin Page\",\"admin_page\":\"Events\",\"icon\":\"fas fa-calendar-check\",\"min_role\":\"1\",\"max_role\":\"1\",\"location\":\"Standard\"},{\"label\":\"Files\",\"type\":\"Admin Page\",\"admin_page\":\"Files\",\"icon\":\"far fa-images\",\"min_role\":\"1\",\"max_role\":\"1\",\"location\":\"Standard\"},{\"label\":\"Site structure\",\"type\":\"Admin Page\",\"admin_page\":\"Site structure\",\"icon\":\"fas fa-compass\",\"min_role\":\"1\",\"max_role\":\"1\",\"location\":\"Standard\"},{\"label\":\"Modules\",\"type\":\"Admin Page\",\"admin_page\":\"Modules\",\"icon\":\"fas fa-cubes\",\"min_role\":\"1\",\"max_role\":\"1\",\"location\":\"Standard\"}]},{\"label\":\"User\",\"type\":\"Header\",\"icon\":\"far fa-user\",\"min_role\":\"80\",\"max_role\":\"1\",\"location\":\"Standard\",\"user_menu_header\":true,\"subitems\":[{\"label\":\"User settings\",\"type\":\"User Page\",\"user_page\":\"User settings\",\"icon\":\"fas fa-user-cog\",\"min_role\":\"80\",\"max_role\":\"1\",\"location\":\"Standard\"},{\"label\":\"Logout\",\"type\":\"User Page\",\"user_page\":\"Logout\",\"icon\":\"fas fa-sign-out-alt\",\"min_role\":\"80\",\"max_role\":\"1\",\"location\":\"Standard\"}]},{\"label\":\"Login\",\"type\":\"User Page\",\"user_page\":\"Login\",\"icon\":\"fas fa-sign-in-alt\",\"min_role\":\"100\",\"max_role\":\"100\",\"location\":\"Standard\"}]);\nawait setConfig(\"home_page_by_role\", { \"1\": \"uvod\", \"20\": \"uvod\", \"30\": \"uvod\", \"40\": \"uvod\", \"60\": \"uvod\", \"70\": \"uvod\", \"80\": \"bez_pristupu\", \"100\": \"vitejte\" });\nawait setConfig(\"allow_signup\", false);            // účty jen na pozvánku\nawait setConfig(\"twofa_policy_by_role\", { \"1\": \"Mandatory\", \"20\": \"Mandatory\", \"30\": \"Mandatory\", \"60\": \"Optional\", \"70\": \"Optional\" });\nawait setConfig(\"default_locale\", \"cs\");\nawait setConfig(\"site_name\", \"Klientská sekce SVJ\");\nawait refreshSystemCache();\nreturn { notify: \"Hotovo: menu, domovské stránky, zákaz registrace, 2FA a čeština nastaveny.\" };\n",
         "run_where": "Server"
       },
       "channel": null,

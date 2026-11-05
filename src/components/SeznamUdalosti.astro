@@ -1,0 +1,19 @@
+---
+// Přehled událostí z klientské sekce. Když žádná není, sekce se skryje.
+import { kartaUdalosti, nadchazejiciUdalosti, probehleUdalosti, type Prispevek } from '../prispevky';
+
+interface Props {
+  prispevky: Prispevek[];
+  druh?: 'nadchazejici' | 'probehle';
+  limit?: number;
+}
+const { prispevky, druh = 'nadchazejici', limit } = Astro.props;
+const vyber = (druh === 'probehle' ? probehleUdalosti(prispevky) : nadchazejiciUdalosti(prispevky)).slice(0, limit ?? Infinity);
+---
+
+<section class="sekce-udalosti" data-udalosti={druh} data-limit={limit} hidden={vyber.length === 0}>
+  <slot />
+  <div class="udalosti">
+    {vyber.map((p) => <Fragment set:html={kartaUdalosti(p)} />)}
+  </div>
+</section>

@@ -10,7 +10,7 @@ z ní se pak vyexportuje balíček `../svj-klientska-sekce.json`.
 | `export-pack.js` | Vyexportuje balíček (stejný formát jako „Vytvořit balíček“ v administraci). |
 | `rebuild.sh` | Smaže lokální databázi a vše sestaví znovu, pak spustí server na portu 3000. |
 | `smtp.js` | Testovací SMTP server na portu 2525. Zprávy včetně příloh ukládá do `mail-out/`. |
-| `test.cjs` | 83 automatických kontrol (včetně menu podle rolí): přístupy rolí, pokusy o obejití přes API, ochrana souborů, celé schvalování faktur včetně e-mailu. |
+| `test.cjs` | 99 automatických kontrol (včetně menu podle rolí a příspěvků na web): přístupy rolí, pokusy o obejití přes API, ochrana souborů, celé schvalování faktur včetně e-mailu. |
 
 ## Postup
 

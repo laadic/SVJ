@@ -12,6 +12,7 @@ Co umí:
 - **Evidenci jednotek a vlastníků**. Vlastník vidí jen svou jednotku a sám si upraví kontakt.
 - **Schvalování faktur výborem**. Faktura se schválí, až ji schválí aspoň dva různí členové
   výboru. Pak se sama přesune mezi schválené a odešle e-mailem s PDF v příloze.
+- **Příspěvky a události pro veřejný web**. Výbor je píše tady a na webu SVJ se ukážou hned.
 
 ---
 
@@ -24,6 +25,7 @@ Co umí:
 | Interní dokumenty výboru | – | – | – | nahrávat a mazat | vše |
 | Evidence jednotek a vlastníků | – | jen svoje (kontakt může upravit) | spravovat | spravovat | vše |
 | Faktury | – | – | – | nahrávat a schvalovat | vše |
+| Příspěvky a události na web | – | – | – | psát a mazat | vše |
 | Uživatelské účty | svůj | svůj | svůj | svůj | zakládat a spravovat |
 
 V Saltcornu se role jmenují `najemnik`, `vlastnik`, `spravce`, `vybor` a `admin`.
@@ -32,6 +34,23 @@ V Saltcornu se role jmenují `najemnik`, `vlastnik`, `spravce`, `vybor` a `admin
 - Roli `staff` nepoužívejte.
 - **Admin se při schvalování faktur počítá jako člen výboru.** Účet admina proto dávejte jen
   členovi výboru.
+
+---
+
+## Příspěvky a události na veřejném webu
+
+**Výbor → Příspěvky na web → Nový příspěvek nebo událost**:
+
+- **Aktualita**: nadpis, krátké shrnutí a celý text. Na webu se ukáže na úvodní stránce
+  v části *Aktuality*. Celý text si návštěvník rozbalí tlačítkem „Celý text“.
+- **Událost**: navíc datum, čas (např. `18:00`) a místo. Na webu se ukáže v části
+  *Plánované události*. Po jejím dni se sama přesune mezi *Proběhlé události*.
+- **Důležité** příspěvek na webu zvýrazní.
+- **Koncept** se na webu neukáže, dokud zaškrtnutí nezrušíte. Hodí se pro rozepsané texty.
+- V textu oddělte odstavce prázdným řádkem. Webové adresy (`https://…`) se samy změní v odkazy.
+
+Uložený příspěvek je na webu vidět hned. Stačí stránku webu obnovit, nic dalšího se
+zveřejňovat nemusí. Smazáním příspěvku z přehledu zmizí i z webu.
 
 ---
 

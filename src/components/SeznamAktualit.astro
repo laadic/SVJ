@@ -1,0 +1,46 @@
+---
+// Sjednocený seznam aktualit: ze souborů (src/content/aktuality) i z klientské sekce,
+// seřazený od nejnovější. Skript v prohlížeči ho po načtení stránky obnoví.
+import { getCollection, type CollectionEntry } from 'astro:content';
+import Aktualita from './Aktualita.astro';
+import { aktualityZKlientskeSekce, den, kartaAktuality, klicRazeni, type Prispevek } from '../prispevky';
+import { url } from '../utils';
+
+interface Props {
+  prispevky: Prispevek[]; // z klientské sekce (načtené při sestavení)
+  limit?: number; // kolik zobrazit (bez limitu = všechny)
+  odkazNaVse?: boolean; // zobrazit odkaz „Všechny aktuality“, když se nevejdou
+}
+const { prispevky, limit, odkazNaVse = false } = Astro.props;
+
+type Polozka = { razeni: string } & ({ soubor: CollectionEntry<'aktuality'> } | { prispevek: Prispevek });
+const zeSouboru = await getCollection('aktuality');
+const polozky: Polozka[] = [
+  ...zeSouboru.map((a) => ({ razeni: klicRazeni(a.data.datum.toISOString().slice(0, 10)), soubor: a })),
+  ...aktualityZKlientskeSekce(prispevky).map((p) => ({ razeni: klicRazeni(den(p.datum), p.id), prispevek: p })),
+].sort((a, b) => b.razeni.localeCompare(a.razeni));
+const max = limit ?? Infinity;
+---
+
+<section data-aktuality data-limit={limit}>
+  <slot />
+  <p class="slaby" data-prazdne hidden={polozky.length > 0}>Zatím zde nejsou žádné aktuality.</p>
+  <div class="aktuality">
+    {
+      polozky.map((pol, i) =>
+        'soubor' in pol ? (
+          <Aktualita a={pol.soubor} skryta={i >= max} />
+        ) : (
+          <Fragment set:html={kartaAktuality(pol.prispevek, i >= max)} />
+        ),
+      )
+    }
+  </div>
+  {
+    odkazNaVse && (
+      <p class="sekce__vice" data-vice hidden={polozky.length <= max}>
+        <a class="tlacitko tlacitko--svetle" href={url('aktuality/')}>Všechny aktuality</a>
+      </p>
+    )
+  }
+</section>
